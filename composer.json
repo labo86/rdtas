@@ -1,0 +1,46 @@
+{
+  "name": "labo86/rdtas",
+  "description": "Una nueva asombrosa biblioteca Composer",
+  "authors": [
+    {
+      "name": "Edwin Rodríguez-León",
+      "role": "Developer"
+    }
+  ],
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "require": {
+    "php": "^7.4",
+    "labo86/exception_with_data" : "^2.1.0",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.5",
+    "mikey179/vfsstream": "^1.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "labo86\\rdtas\\": "src/"
+    },
+    "files": [ "src/functions.php"]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "test\\labo86\\rdtas\\": "test/"
+    }
+  },
+  "archive": {
+    "exclude": [
+      "/.git",
+      "/.idea",
+      "/examples",
+      "/scripts",
+      "/test",
+      "/.gitignore",
+      "/.phpunit.result.cache",
+      "/phpunit.xml.dist",
+      "/README.md",
+      "/.travis.yml"
+    ]
+  }
+}
