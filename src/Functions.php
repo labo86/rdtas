@@ -28,7 +28,7 @@ function stringToArray(string $json_data) : array {
 }
 
 /**
- * Guarada los datos en un array en un archivo. La serializacion se hace en formato json
+ * Guardada los datos en un array en un archivo. La serializacion se hace en formato json
  * Usar {@see fileToArray()} para recuperar la información
  * @param string $filename
  * @param array $data
@@ -121,7 +121,7 @@ function resetDirectory(string $directory_path): string
 }
 
 /**
- * Borarr un archivo o directorio si existe.
+ * Borrar un archivo o directorio si existe.
  * @param string $path
  * @return bool
  * @throws ExceptionWithData
@@ -137,3 +137,4 @@ function removeFileOrDir(string $path) : bool {
         throw new ExceptionWithData('error removing file or dir', ['path' => $path, 'command' => $command, 'output' => $output, 'return' => $return]);
     return true;
 }
+

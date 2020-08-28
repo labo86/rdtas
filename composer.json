@@ -1,6 +1,6 @@
 {
   "name": "labo86/rdtas",
-  "description": "Una nueva asombrosa biblioteca Composer",
+  "description": "Una biblioteca con utilidades",
   "authors": [
     {
       "name": "Edwin Rodríguez-León",
@@ -22,7 +22,9 @@
     "psr-4": {
       "labo86\\rdtas\\": "src/"
     },
-    "files": [ "src/functions.php"]
+    "files": [
+      "src/Functions.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {

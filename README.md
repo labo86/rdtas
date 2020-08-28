@@ -1,6 +1,6 @@
 labo86\rdtas
 ========
-Una nueva asombrosa biblioteca Composer.
+Una biblioteca con utilidades.
 
 [![Latest Stable Version](https://poser.pugx.org/labo86/rdtas/v/stable)](https://packagist.org/packages/labo86/rdtas)
 [![Total Downloads](https://poser.pugx.org/labo86/rdtas/downloads)](https://packagist.org/packages/labo86/rdtas)
@@ -10,7 +10,8 @@ Una nueva asombrosa biblioteca Composer.
 [![Code Climate](https://codeclimate.com/github/labo86/rdtas/badges/gpa.svg)](https://codeclimate.com/github/labo86/rdtas)
 ![Hecho en Chile](https://img.shields.io/badge/country-Chile-red)
 
-
+Esta biblioteca tiene un cojunto de funciones y clases para el desarrollo rápido. El objetivo de esta biblioteca es dejar de utilizarla.
+Se debe utilizar tal como alguien utiliza las rueditas de la bicicleta, para aprender a practicar. Cada función debe ser reemplazada por su contraparte mejor probada.
 
 
 ## Instalación
