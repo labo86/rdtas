@@ -9,6 +9,10 @@
   ],
   "license": "MIT",
   "minimum-stability": "stable",
+  "suggest": {
+    "labo86/staty" : "Para usar las rueditas parar staty",
+    "labo86/hapi" : "Para usar las rueditas para hapi"
+  },
   "require": {
     "php": "^7.4",
     "labo86/exception_with_data" : "^2.1.0",
@@ -17,7 +21,9 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^8.5",
-    "mikey179/vfsstream": "^1.6"
+    "mikey179/vfsstream": "^1.6",
+    "labo86/staty" : "^0.3.1",
+    "labo86/hapi" : "^0.2"
   },
   "autoload": {
     "psr-4": {
