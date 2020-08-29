@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+namespace labo86\rdtas\hapi;
+
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\hapi\Controller;
 use labo86\hapi\ServiceFunctionReflector;
