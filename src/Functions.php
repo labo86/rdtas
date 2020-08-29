@@ -138,3 +138,16 @@ function removeFileOrDir(string $path) : bool {
     return true;
 }
 
+function readFileByLine(string $filename) : Generator {
+    $f = @fopen($filename, 'r');
+    if ( $f === FALSE ) {
+        throw new ExceptionWithData('error at opening file', ['filename' => $filename]);
+    }
+
+    while ( $l = fgets($f) ) {
+        yield trim($l);
+    }
+
+    fclose($f);
+}
+

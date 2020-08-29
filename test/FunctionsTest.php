@@ -10,6 +10,7 @@ use function labo86\rdtas\arrayToString;
 use function labo86\rdtas\createDirectory;
 use function labo86\rdtas\fileToArray;
 use function labo86\rdtas\iterateFilesRecursively;
+use function labo86\rdtas\readFileByLine;
 use function labo86\rdtas\removeFileOrDir;
 use function labo86\rdtas\resetDirectory;
 use function labo86\rdtas\stringToArray;
@@ -118,6 +119,30 @@ EOF;
         removeFileOrDir($this->path . '/a1');
 
         $this->assertFileNotExists($this->path . '/a1');
+    }
+
+    function testReadFileByLine()
+    {
+        $filename = $this->path . '/a1';
+        file_put_contents($filename, <<<EOF
+hola
+como
+te
+va
+EOF
+);
+        $this->assertFileExists($filename);
+        $lines = iterator_to_array(readFileByLine($filename), false);
+        $this->assertEquals(['hola', 'como', 'te', 'va'], $lines);
+    }
+
+    function testReadFileFailure()
+    {
+        $this->expectException(ExceptionWithData::class);
+        $filename = $this->path . '/a1';
+
+        $this->assertFileNotExists($filename);
+        $lines = iterator_to_array(readFileByLine($filename), false);
     }
 }
 
