@@ -8,6 +8,8 @@ use labo86\hapi\Controller;
 use labo86\hapi\ServiceFunctionReflector;
 use labo86\hapi_core\Request;
 use labo86\hapi_core\ResponseJson;
+use ReflectionException;
+use ReflectionFunction;
 
 /**
  * Obtiene una lista automatizada de metodos
@@ -47,4 +49,5 @@ function registerAutomaticMethodService(Controller $controller, string $filename
         ->registerService('get_automatic_method_list', function (Request $request) use ($controller) {
             return new ResponseJson(getAutomaticMethodList(__FILE__));
         });
+    return $controller;
 }
