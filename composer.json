@@ -31,7 +31,8 @@
     },
     "files": [
       "src/Functions.php",
-      "src/pdo/Functions.php"
+      "src/pdo/Functions.php",
+      "src/hapi/Functions.php"
     ]
   },
   "autoload-dev": {
