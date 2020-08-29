@@ -24,7 +24,8 @@
       "labo86\\rdtas\\": "src/"
     },
     "files": [
-      "src/Functions.php"
+      "src/Functions.php",
+      "src/pdo/Functions.php"
     ]
   },
   "autoload-dev": {
