@@ -46,8 +46,8 @@ function registerAutomaticMethodService(Controller $controller, string $filename
 {
     $controller->registerFunctionsInFile($filename);
     $controller->getServiceMap()
-        ->registerService('get_automatic_method_list', function (Request $request) use ($controller) {
-            return new ResponseJson(getAutomaticMethodList(__FILE__));
+        ->registerService('get_automatic_method_list', function (Request $request) use ($filename) {
+            return new ResponseJson(getAutomaticMethodList($filename));
         });
     return $controller;
 }
