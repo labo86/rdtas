@@ -3,6 +3,17 @@ language: php
 php:
   - 7.4
 
+before_install:
+  - printf "\n" | pecl install imagick
+  - sudo apt-get --reinstall install -qq language-pack-en language-pack-es
+
+addon:
+  apt:
+    update: true
+    packages:
+      - librsvg2-bin
+      - imagemagick
+
 install:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source
