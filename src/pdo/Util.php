@@ -21,7 +21,7 @@ class Util
      * @param string|string $host
      * @return string
      */
-    public static function mysqlDsn(string $db_name, string $host = 'localhost')
+    public static function mysqlDns(string $db_name, string $host = 'localhost')
     {
         return sprintf('mysql:host=%s;dbname=%s;charset=utf8', $host, $db_name);
     }
@@ -32,8 +32,9 @@ class Util
      * @return PDOStatement
      * @throws ExceptionWithData
      */
-    public static function execute(PDOStatement $stmt, ...$args)
+    public static function execute(PDOStatement $stmt, array $args = [])
     {
+
         if ($stmt->execute($args))
             return $stmt;
 
@@ -44,15 +45,15 @@ class Util
         ]);
     }
 
-    public static function fetchAll(PDOStatement $stmt, ...$args): array
+    public static function fetchAll(PDOStatement $stmt, array $args = []): array
     {
-        self::execute($stmt, ...$args);
+        self::execute($stmt, $args);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public static function fetchRow(PDOStatement $stmt, ...$args): array
+    public static function fetchRow(PDOStatement $stmt, array $args = []): array
     {
-        self::execute($stmt, ...$args);
+        self::execute($stmt, $args);
 
         if ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             return $row;
@@ -74,22 +75,22 @@ class Util
         return $stmt;
     }
 
-    public static function selectRow(PDO $pdo, string $query, ...$args): array
+    public static function selectRow(PDO $pdo, string $query, array $args = []): array
     {
         $stmt = self::prepare($pdo, $query);
-        return self::fetchRow($stmt, ...$args);
+        return self::fetchRow($stmt, $args);
     }
 
-    public static function selectAll(PDO $pdo, string $query, ...$args): array
+    public static function selectAll(PDO $pdo, string $query, array $args = []): array
     {
         $stmt = self::prepare($pdo, $query);
-        return self::fetchAll($stmt, ...$args);
+        return self::fetchAll($stmt, $args);
     }
 
-    public static function update(PDO $pdo, string $query, ...$args)
+    public static function update(PDO $pdo, string $query, array $args = [])
     {
         $stmt = self::prepare($pdo, $query);
-        self::execute($stmt, ...$args);
+        self::execute($stmt, $args);
     }
 
 }

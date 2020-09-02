@@ -3,6 +3,7 @@
     <testsuites>
         <testsuite name="main">
             <directory>./test</directory>
+            <exclude>./test/pdo/UtilMySqlTest.php</exclude>
         </testsuite>
     </testsuites>
     <filter>
