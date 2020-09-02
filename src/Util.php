@@ -13,7 +13,7 @@ use Throwable;
 class Util
 {
 
-    function arrayToString(array $data): string
+    public static function arrayToString(array $data): string
     {
         $json_data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         if ($json_data === FALSE) {
@@ -22,7 +22,7 @@ class Util
         return $json_data;
     }
 
-    function stringToArray(string $json_data): array
+    public static function stringToArray(string $json_data): array
     {
         $data = json_decode($json_data, true);
         if ($data === NULL) {
