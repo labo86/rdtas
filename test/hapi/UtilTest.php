@@ -6,12 +6,13 @@ namespace test\labo86\rdtas\hapi;
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\hapi\Controller;
 use labo86\hapi_core\Request;
+use labo86\rdtas\hapi\Util;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use function labo86\rdtas\hapi\getAutomaticMethodList;
 use function labo86\rdtas\hapi\registerAutomaticMethodService;
 
-class FunctionsTest extends TestCase
+class UtilTest extends TestCase
 {
     private $path;
 
@@ -41,7 +42,7 @@ function f1_get_test2(int $a, $b) { return $a + $b; }
 EOF);
 
         include($this->path. '/file.php');
-        $method_list = getAutomaticMethodList($this->path . '/file.php');
+        $method_list = Util::getAutomaticMethodList($this->path . '/file.php');
         $this->assertEquals([[
             'method' => 'f1_get_test1',
             'parameter_list' => [
@@ -72,7 +73,7 @@ function f2_get_test2(int $a, $b) { return $a + $b; }
 EOF);
 
         $controller = new Controller();
-        registerAutomaticMethodService($controller, $this->path . '/file.php');
+        Util::registerAutomaticMethodService($controller, $this->path . '/file.php');
         $callback = $controller->getServiceMap()->getService('get_automatic_method_list');
         $this->assertIsCallable($callback);
 

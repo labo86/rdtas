@@ -50,6 +50,6 @@ class ArrayWrapper implements ArrayAccess
      * @throws ExceptionWithData
      */
     public function toString() : string {
-        return arrayToString($this->data);
+        return Util::arrayToString($this->data);
     }
 }

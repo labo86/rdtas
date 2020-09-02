@@ -28,12 +28,7 @@
   "autoload": {
     "psr-4": {
       "labo86\\rdtas\\": "src/"
-    },
-    "files": [
-      "src/Functions.php",
-      "src/pdo/Functions.php",
-      "src/hapi/Functions.php"
-    ]
+    }
   },
   "autoload-dev": {
     "psr-4": {

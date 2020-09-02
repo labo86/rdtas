@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace test\labo86\rdtas;
 
 use labo86\exception_with_data\ExceptionWithData;
+use labo86\rdtas\Util;
 use PHPUnit\Framework\TestCase;
 use function labo86\rdtas\arrayToFile;
 use function labo86\rdtas\arrayToString;
@@ -15,7 +16,7 @@ use function labo86\rdtas\removeFileOrDir;
 use function labo86\rdtas\resetDirectory;
 use function labo86\rdtas\stringToArray;
 
-class FunctionsTest extends TestCase
+class UtilTest extends TestCase
 {
 
     private $path;
@@ -41,7 +42,7 @@ class FunctionsTest extends TestCase
     "a": "value"
 }
 EOF;
-        $this->assertEquals($expected_json, arrayToString(["a" => "value"]));
+        $this->assertEquals($expected_json, Util::arrayToString(["a" => "value"]));
 
     }
 
@@ -52,12 +53,12 @@ EOF;
     "a": "value"
 }
 EOF;
-        $this->assertEquals(["a" => "value"], stringToArray($original_json));
+        $this->assertEquals(["a" => "value"], Util::stringToArray($original_json));
     }
 
     function testStringToArrayFail() {
         $this->expectException(ExceptionWithData::class);
-        stringToArray("something bad");
+        Util::stringToArray("something bad");
     }
 
 
@@ -65,8 +66,8 @@ EOF;
     {
         $filename = $this->path . '/json';
         $array = ["hola" => "value"];
-        arrayToFile($filename, $array);
-        $this->assertEquals($array, fileToArray($filename));
+        Util::arrayToFile($filename, $array);
+        $this->assertEquals($array, Util::fileToArray($filename));
     }
 
 
@@ -78,7 +79,7 @@ EOF;
         touch ( $this->path . '/a3');
 
         $file_names = [];
-        foreach ( iterateFilesRecursively($this->path) as $files )
+        foreach ( Util::iterateFilesRecursively($this->path) as $files )
             $file_names[] = $files->getBasename();
 
         sort($file_names);
@@ -90,7 +91,7 @@ EOF;
     {
         $directory_path = $this->path . '/dir1';
         $this->assertDirectoryNotExists($directory_path);
-        createDirectory($directory_path);
+        Util::createDirectory($directory_path);
         $this->assertDirectoryExists($directory_path);
 
     }
@@ -98,7 +99,7 @@ EOF;
     function testResetDirectoryNotExistent()
     {
         $this->assertFileNotExists($this->path . '/a1');
-        resetDirectory($this->path . '/a1');
+        Util::resetDirectory($this->path . '/a1');
 
         $this->assertFileExists($this->path . '/a1');
     }
@@ -107,7 +108,7 @@ EOF;
     {
         touch($this->path . '/a1');
         $this->assertFileExists($this->path . '/a1');
-        resetDirectory($this->path . '/a1');
+        Util::resetDirectory($this->path . '/a1');
 
         $this->assertFileExists($this->path . '/a1');
     }
@@ -116,7 +117,7 @@ EOF;
     {
         touch($this->path . '/a1');
         $this->assertFileExists($this->path . '/a1');
-        removeFileOrDir($this->path . '/a1');
+        Util::removeFileOrDir($this->path . '/a1');
 
         $this->assertFileNotExists($this->path . '/a1');
     }
@@ -132,7 +133,7 @@ va
 EOF
 );
         $this->assertFileExists($filename);
-        $lines = iterator_to_array(readFileByLine($filename), false);
+        $lines = iterator_to_array(Util::readFileByLine($filename), false);
         $this->assertEquals(['hola', 'como', 'te', 'va'], $lines);
     }
 
@@ -142,7 +143,7 @@ EOF
         $filename = $this->path . '/a1';
 
         $this->assertFileNotExists($filename);
-        $lines = iterator_to_array(readFileByLine($filename), false);
+        $lines = iterator_to_array(Util::readFileByLine($filename), false);
     }
 }
 
