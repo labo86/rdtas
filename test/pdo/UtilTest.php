@@ -49,7 +49,7 @@ class UtilTest extends TestCase
     public function testExecuteFail()
     {
         $this->expectException(ExceptionWithData::class);
-        $this->expectExceptionMessage('error preparing exception');
+        $this->expectExceptionMessage('error at updating');
         $pdo = new \PDO(Util::sqliteDns(":memory:"));
         Util::update($pdo, "adfadfasdf");
 

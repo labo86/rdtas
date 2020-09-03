@@ -55,7 +55,7 @@ class UtilMySqlTest extends TestCase
     public function testExecuteFail()
     {
         $this->expectException(ExceptionWithData::class);
-        $this->expectExceptionMessage('error executing query');
+        $this->expectExceptionMessage('error at updating');
         $pdo = $this->getPDO();
         Util::update($pdo, "adfadfasdf");
 

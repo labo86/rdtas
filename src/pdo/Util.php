@@ -5,6 +5,7 @@ namespace labo86\rdtas\pdo;
 
 
 use labo86\exception_with_data\ExceptionWithData;
+use labo86\exception_with_data\Util as UtilExcep;
 use PDO;
 use PDOStatement;
 
@@ -32,7 +33,7 @@ class Util
      * @return PDOStatement
      * @throws ExceptionWithData
      */
-    public static function execute(PDOStatement $stmt, array $args = [])
+    public static function execute(PDOStatement $stmt, array $args = []) : PDOStatement
     {
 
         if ($stmt->execute($args))
@@ -76,21 +77,51 @@ class Util
     }
 
     public static function selectRow(PDO $pdo, string $query, array $args = []): array
-    {
-        $stmt = self::prepare($pdo, $query);
-        return self::fetchRow($stmt, $args);
+    {   try {
+            $stmt = self::prepare($pdo, $query);
+            return self::fetchRow($stmt, $args);
+        } catch ( ExceptionWithData $exception ) {
+            throw UtilExcep::rethrow('error at selecting row', [
+                'query' => $query,
+                'args' => $args ], $exception);
+        }
     }
 
     public static function selectAll(PDO $pdo, string $query, array $args = []): array
     {
-        $stmt = self::prepare($pdo, $query);
-        return self::fetchAll($stmt, $args);
+        try {
+            $stmt = self::prepare($pdo, $query);
+            return self::fetchAll($stmt, $args);
+        } catch ( ExceptionWithData $exception ) {
+            throw UtilExcep::rethrow('error at selecting all', [
+                'query' => $query,
+                'args' => $args ], $exception);
+        }
     }
 
-    public static function update(PDO $pdo, string $query, array $args = [])
+    public static function update(PDO $pdo, string $query, array $args = []) : PDOStatement
     {
-        $stmt = self::prepare($pdo, $query);
-        self::execute($stmt, $args);
+        try {
+            $stmt = self::prepare($pdo, $query);
+            return self::execute($stmt, $args);
+        } catch ( ExceptionWithData $exception ) {
+            throw UtilExcep::rethrow('error at updating', [
+                'query' => $query,
+                'args' => $args ], $exception);
+        }
+    }
+
+    public static function updateOne(PDO $pdo, string $query, array $args = []) : PDOStatement {
+        $stmt = self::update($pdo, $query, $args);
+        $rowCount = $stmt->rowCount();
+        if ( $rowCount < 0 ) {
+            throw new ExceptionWithData('no row has changed', [
+                'query' => $query,
+                'args' => $args,
+                'row_count' => $rowCount
+            ]);
+        }
+        return $stmt;
     }
 
 }
