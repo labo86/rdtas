@@ -91,7 +91,7 @@ class Util
      * @throws ExceptionWithData
      * @throws ReflectionException
      */
-    public function registerFunction(Controller $controller, string $function_name)
+    public static function registerFunction(Controller $controller, string $function_name)
     {
         $reflection_function = new ReflectionFunction($function_name);
         $controller->getServiceMap()->registerService($function_name, ServiceFunctionReflector::createServiceCallback($reflection_function));
