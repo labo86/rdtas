@@ -8,6 +8,8 @@ use Closure;
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\exception_with_data\ThrowableList;
 use labo86\exception_with_data\Util;
+use labo86\hapi\InputFile;
+use labo86\hapi\InputFileList;
 use labo86\hapi_core\Request;
 use labo86\hapi_core\Response;
 use labo86\hapi_core\ResponseJson;
