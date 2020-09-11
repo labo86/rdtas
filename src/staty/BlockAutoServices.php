@@ -43,7 +43,9 @@ class BlockAutoServices extends Block
         $this->sectionBegin($form_data['id']);
     }
 
-    public function html() {?>
+    public function html() {
+        $this->sectionEnd();
+        ?>
 <div id="main-container" class="section-container" style="text-align:center">
         <div class="container-padding" data-page-name="index_page">
             <h2>Servicios personalizados</h2>
