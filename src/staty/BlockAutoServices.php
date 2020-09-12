@@ -13,6 +13,7 @@ use labo86\staty\Block;
  * Requiere que se incluya en los header la biblioteca sero {@see https://github.com/labo86/sero}
  * <code>
  * <script src="https://unpkg.com/@labo86/sero@latest/dist/sero.min.js"></script>
+ * <script src="https://unpkg.com/@labo86/sero@latest/dist/rdtas.min.js"></script>
  * </code>
  *
  * Esta hecho para soportar un template CSS basado en labo86. como ejemplo ver el proyecto {@see https://github.com/labo86/mpanager mpanager}
@@ -119,7 +120,7 @@ fetch(endpoint + "?method=get_automatic_method_list")
     }
     document.getElementById('automatic_buttons').innerHTML = html_automatic_buttons;
 
-    appendToInnerHtml(document.getElementById('main-container'), html);
+    rdtas.appendToInnerHtml(document.getElementById('main-container'), html);
 
     let url = new URL(window.location);
     let params = new URLSearchParams(url.search);
@@ -131,29 +132,8 @@ fetch(endpoint + "?method=get_automatic_method_list")
 
 });
 
-function appendToInnerHtml(element, content) {
-    let new_content = document.createElement('div');
-    new_content.innerHTML = content;
-
-    while (new_content.firstChild) {
-        element.appendChild(new_content.firstChild);
-    }
-}
-
-function switchVisibility(element, name) {
-    for ( let child of element.children ) {
-        if ( !child.hasAttribute('data-page-name') )
-            child.style.display = 'none';
-        else if ( child.getAttribute('data-page-name') === name ) {
-            child.style.display = null;
-        } else {
-            child.style.display = 'none';
-        }
-    }
-}
-
 function changePage(page_id) {
-    switchVisibility(document.getElementById('main-container'),page_id);
+    rdtas.switchVisibility(document.getElementById('main-container'),page_id);
 }
 
 function submitRequest(form_id) {
@@ -164,8 +144,7 @@ function submitRequest(form_id) {
     })
     .then( res => res.blob() )
     .then( blob => {
-        let file = window.URL.createObjectURL(blob);
-        window.open(file);
+        rdtas.openBlobInNewWindow(blob);
     });
 }
 
@@ -173,10 +152,9 @@ function submitRequestGet(query_params) {
     event.preventDefault();
     fetch(endpoint + "?" + query_params )
     .then( res => res.blob() )
-        .then( blob => {
-        let file = window.URL.createObjectURL(blob);
-            window.open(file);
-        });
+    .then( blob => {
+        rdtas.openBlobInNewWindow(blob);
+    });
 }
 </script>
     <?php
