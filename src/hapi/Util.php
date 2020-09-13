@@ -32,6 +32,7 @@ class Util
                 'endpoint' => $endpoint
             ];
         }
+        usort($function_info_list, function($a, $b) { return $a['method'] <=> $b['method']; });
         return $function_info_list;
     }
 

@@ -19,6 +19,7 @@ use labo86\staty\Block;
  * Esta hecho para soportar un template CSS basado en labo86. como ejemplo ver el proyecto {@see https://github.com/labo86/mpanager mpanager}
  * Se debe setear el metodo {@see setService()}
  * @package labo86\staty
+ * @deprecated
  */
 class BlockAutoServices extends Block
 {
