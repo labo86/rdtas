@@ -60,8 +60,8 @@ class BlockPageEasyServices extends Block
             <?=$this->getSectionContent('head_additional')?>
         </head>
         <body>
-        <div style="display:flex;height:100%;flex-direction:column">
-            <div style="background-color:white; flex-grow:1; border-bottom-color:white;border-bottom-style:double;">
+        <div>
+            <div style="background-color:white; border-bottom-color:white;border-bottom-style:double;">
                 <?php $this->htmlBodyContent(); ?>
             </div>
             <footer class="section-container">
@@ -71,6 +71,9 @@ class BlockPageEasyServices extends Block
                 </div>
             </footer>
         </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
         </body>
         </html>
         <?php
@@ -79,17 +82,17 @@ class BlockPageEasyServices extends Block
     public function htmlHeadCommon() { ?>
         <meta charset="UTF-8">
         <meta name="viewport"
-              content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+              content="width=device-width, initial-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <script src="https://unpkg.com/@labo86/sero@latest/dist/sero.min.js"></script>
         <script src="https://unpkg.com/@labo86/rdtas@latest/dist/rdtas.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <?php
     }
 
-
     public function htmlBodyContent() { ?>
-<div id="main-container" class="section-container" style="text-align:center">
-        <div class="container-padding" data-page-name="index_page">
+<div id="main-container">
+        <div class="container-md" data-page-name="index_page">
             <h2>Servicios personalizados</h2>
             <?php foreach ( $this->custom_method_form_list as $form_data ) :
                 $method = $form_data['method'];
@@ -98,13 +101,14 @@ class BlockPageEasyServices extends Block
                 <button onclick="changePage('<?=$id?>_page')"><?=$method?></button><br/>
             <?php endforeach; ?>
             <h2>Servicios automaticos disponibles</h2>
-            <div id="automatic_buttons"></div>
+            <div id="automatic_buttons" class="list-group">
+            </div>
         </div>
     <?php foreach ( $this->custom_method_form_list as $form_data ) :
         $method = $form_data['method'];
         $id = $form_data['id'];
         ?>
-        <div class="container-padding" data-page-name="<?=$id?>_page" style="display:none">
+        <div class="container-md" data-page-name="<?=$id?>_page" style="display:none">
             <h2><?=$method?></h2>
             <form id="<?=$id?>_form">
             <?=$this->getSectionContent($id)?>
@@ -126,40 +130,41 @@ fetch(endpoint)
     let html = "";
     for ( let automatic_method of myJson ) {
             if ( automatic_method.parameter_list.length === 0 ) continue;
-            html += "    <div class=\"container-padding\" data-page-name=\"" + automatic_method.method + "_page\" style=\"display:none\">\n" +
-                "        <h2>" + automatic_method.method +"</h2>\n" +
-                "        <form id=\"" + automatic_method.method +"_form\">\n";
+            html += "    <div class=\"container-md\" data-page-name=\"" + automatic_method.method + "_page\" style=\"display:none\">" +
+                "        <h2>" + automatic_method.method +"</h2>" +
+                "       <button onclick=\"changePage('index_page')\">Back</button>" +
+                "        <form id=\"" + automatic_method.method +"_form\">";
 
             for ( let parameter of automatic_method.parameter_list) {
+                html += "<div class=\"form-group\">";
                 html += "<label>" + parameter.name + "</label>";
                 if ( parameter.type === 'labo86\\hapi\\InputFile' ) {
-                    html += "<input type=\"file\" name=\"" + parameter.name + "\">";
+                    html += "<input class=\"form-control\" type=\"file\" name=\"" + parameter.name + "\">";
                 } else if ( parameter.type === 'labo86\\hapi\\InputFileList') {
-                    html += "<input type=\"file\" name=\"" + parameter.name + "\" multiple>";
+                    html += "<input class=\"form-control\" type=\"file\" name=\"" + parameter.name + "\" multiple>";
                 } else if ( parameter.type === 'string') {
-                    html += "<input type=\"text\" name=\"" + parameter.name + "\">";
+                    html += "<input class=\"form-control\" type=\"text\" name=\"" + parameter.name + "\">";
                 } else if ( parameter.type === 'int') {
-                    html += "<input type=\"text\" name=\"" + parameter.name + "\">";
+                    html += "<input class=\"form-control\" type=\"text\" name=\"" + parameter.name + "\">";
                 }
-                html += "<br/>";
+                html += "</div>";
             }
 
         html +=
-        "            <input type=\"hidden\" name=\"method\" value=\""+ automatic_method.method + "\">\n" +
-        "            <button onclick=\"submitRequest('" + automatic_method.endpoint + "', '"+ automatic_method.method + "_form', '"+ automatic_method.method +"')\">Enviar</button>\n" +
-        "        </form>\n" +
-        "  <iframe id=\"" + automatic_method.method + "_target\"></iframe><br/>" +
-        "        <button onclick=\"newWindow('" + automatic_method.method + "')\">New Window</button><br/>" +
-        "        <button onclick=\"changePage('index_page')\">Back</button>\n" +
+        "            <input type=\"hidden\" name=\"method\" value=\""+ automatic_method.method + "\">" +
+        "            <button type=\"submit\" class=\"btn btn-primary\" onclick=\"submitRequest('" + automatic_method.endpoint + "', '"+ automatic_method.method + "_form', '"+ automatic_method.method +"')\">Enviar</button>" +
+        "        </form>" +
+        "  <iframe id=\"" + automatic_method.method + "_target\"></iframe>" +
+        "        <button onclick=\"newWindow('" + automatic_method.method + "')\">New Window</button>" +
         "    </div>";
     }
 
     let html_automatic_buttons = "";
     for ( let automatic_method of myJson )
         if ( automatic_method.parameter_list.length > 0 ) {
-            html_automatic_buttons += "        <button onclick=\"changePage('" + automatic_method.method + "_page')\">" + automatic_method.method + "</button><br/>";
+            html_automatic_buttons += "        <button  type=\"button\" class=\"list-group-item list-group-item-action\" onclick=\"changePage('" + automatic_method.method + "_page')\">" + automatic_method.method + "</button>";
         } else {
-            html_automatic_buttons += "        <button onclick=\"submitRequestGet('" + automatic_method.endpoint + "', 'method=" + automatic_method.method + "')\">" + automatic_method.method + "</button><br/>";
+            html_automatic_buttons += "        <button  type=\"button\" class=\"list-group-item list-group-item-action\" onclick=\"submitRequestGet('" + automatic_method.endpoint + "', 'method=" + automatic_method.method + "')\">" + automatic_method.method + "</button>";
     }
     document.getElementById('automatic_buttons').innerHTML = html_automatic_buttons;
 
