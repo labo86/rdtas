@@ -3,5 +3,13 @@
     "method": "get_data",
     "parameter_list": [],
     "endpoint": "services/get_data.json"
+  },
+  {
+    "method": "get_data_by_id",
+    "parameter_list": [{
+      "name" : "id",
+      "type" : "int"
+    }],
+    "endpoint": "services/get_data.json"
   }
 ]

@@ -146,8 +146,10 @@ fetch(endpoint)
 
         html +=
         "            <input type=\"hidden\" name=\"method\" value=\""+ automatic_method.method + "\">\n" +
-        "            <button onclick=\"submitRequest('" + automatic_method.endpoint + "', '"+ automatic_method.method + "_form')\">Enviar</button>\n" +
+        "            <button onclick=\"submitRequest('" + automatic_method.endpoint + "', '"+ automatic_method.method + "_form', '"+ automatic_method.method +"')\">Enviar</button>\n" +
         "        </form>\n" +
+        "  <iframe id=\"" + automatic_method.method + "_target\"></iframe><br/>" +
+        "        <button onclick=\"newWindow('" + automatic_method.method + "')\">New Window</button><br/>" +
         "        <button onclick=\"changePage('index_page')\">Back</button>\n" +
         "    </div>";
     }
@@ -177,7 +179,12 @@ function changePage(page_id) {
     rdtas.switchVisibility(document.getElementById('main-container'),page_id);
 }
 
-function submitRequest(endpoint, form_id) {
+function newWindow(method) {
+    let src = document.getElementById(method + "_target").src;
+    window.open(src);
+}
+
+function submitRequest(endpoint, form_id, method) {
     event.preventDefault();
     fetch(endpoint, {
         method: 'POST',
@@ -185,7 +192,10 @@ function submitRequest(endpoint, form_id) {
     })
     .then( res => res.blob() )
     .then( blob => {
-        rdtas.openBlobInNewWindow(blob);
+        let file = window.URL.createObjectURL(blob);
+        let frame = document.getElementById(method + "_target");
+        frame.src = file;
+        //rdtas.openBlobInNewWindow(blob);
     });
 }
 
