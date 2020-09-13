@@ -17,17 +17,19 @@ class Util
     /**
      * Obtiene una lista automatizada de metodos
      * @param string $filename
+     * @param string $endpoint
      * @return array
      * @throws ExceptionWithData
      * @throws ReflectionException
      */
-    public static function getAutomaticMethodList(string $filename): array
+    public static function getAutomaticMethodList(string $filename, string $endpoint = '/controller/ws.php'): array
     {
         $function_info_list = [];
         foreach ( self::iterateFunctionsInFile($filename) as $function_name => $reflection_function ) {
             $function_info_list[] = [
                 'method' => $function_name,
-                'parameter_list' => ServiceFunctionReflector::getParameterInfoList($reflection_function)
+                'parameter_list' => ServiceFunctionReflector::getParameterInfoList($reflection_function),
+                'endpoint' => $endpoint
             ];
         }
         return $function_info_list;
@@ -69,18 +71,22 @@ class Util
 
     /**
      * Registra un metodo llamado get_automatic_method_list en donde se puede obtener información de las servicios que son generados en base a un archivo.
+     * Se puede cambiar el nombre del servico con la variable service.
+     * También se puede setear el endpoint
      * @param Controller $controller
      * @param string $filename
+     * @param string $service_name
+     * @param string $endpoint
      * @return Controller
-     * @throws ReflectionException
      * @throws ExceptionWithData
+     * @throws ReflectionException
      */
-    public static function registerAutomaticMethodService(Controller $controller, string $filename): Controller
+    public static function registerAutomaticMethodService(Controller $controller, string $filename, string $service_name = 'get_automatic_method_list', string $endpoint = '/controller/ws.php'): Controller
     {
         self::registerFunctionsInFile($controller, $filename);
         $controller->getServiceMap()
-            ->registerService('get_automatic_method_list', function (Request $request) use ($filename) {
-                return new ResponseJson(Util::getAutomaticMethodList($filename));
+            ->registerService($service_name, function (Request $request) use ($filename, $endpoint) {
+                return new ResponseJson(Util::getAutomaticMethodList($filename, $endpoint));
             });
         return $controller;
     }

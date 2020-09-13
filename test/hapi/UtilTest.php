@@ -47,12 +47,14 @@ EOF);
             'method' => 'f1_get_test1',
             'parameter_list' => [
                 ['name' => 'a', 'type' => 'string'], ['name' => 'b', 'type' => 'string']
-            ]
+            ],
+            'endpoint' => '/controller/ws.php'
         ], [
             'method' => 'f1_get_test2',
             'parameter_list' => [
                 ['name' => 'a', 'type' => 'int'], ['name' => 'b', 'type' => 'string']
-            ]
+            ],
+            'endpoint' => '/controller/ws.php'
         ]], $method_list);
     }
 
@@ -84,12 +86,14 @@ EOF);
             'method' => 'f2_get_test1',
             'parameter_list' => [
                 ['name' => 'a', 'type' => 'string'], ['name' => 'b', 'type' => 'string']
-            ]
+            ],
+            'endpoint' => '/controller/ws.php'
         ], [
             'method' => 'f2_get_test2',
             'parameter_list' => [
                 ['name' => 'a', 'type' => 'int'], ['name' => 'b', 'type' => 'string']
-            ]
+            ],
+            'endpoint' => '/controller/ws.php'
         ]], $response->getData());
     }
 
@@ -122,12 +126,14 @@ EOF);
             'method' => 'f3_get_test1',
             'parameter_list' => [
                 ['name' => 'a', 'type' => 'string'], ['name' => 'b', 'type' => 'string']
-            ]
+            ],
+            'endpoint' => '/controller/ws.php'
         ], [
             'method' => 'f3_get_test2',
             'parameter_list' => [
                 ['name' => 'a', 'type' => 'int'], ['name' => 'b', 'type' => 'string']
-            ]
+            ],
+            'endpoint' => '/controller/ws.php'
         ]], $response_data);
     }
 
