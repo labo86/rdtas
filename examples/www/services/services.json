@@ -1,0 +1,7 @@
+[
+  {
+    "method": "get_data",
+    "parameter_list": [],
+    "endpoint": "services/get_data.json"
+  }
+]
