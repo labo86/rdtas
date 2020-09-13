@@ -29,6 +29,6 @@ class BlockAutoServicesTest extends TestCase
         ob_start();
         $block->html();
         $string = ob_get_clean();
-        $this->assertStringContainsString("asdfadf", $string);
+        $this->assertStringContainsString("something", $string);
     }
 }

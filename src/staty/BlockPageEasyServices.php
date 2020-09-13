@@ -35,10 +35,11 @@ class BlockPageEasyServices extends Block
         return $this->service;
     }
 
-    public function sectionBeginForm($method) {
+    public function sectionBeginForm(string $method, string $endpoint) {
         $form_data = [
                 'method' => $method,
-                'id' => $method . '_custom'
+                'id' => $method . '_custom',
+                'endpoint' => $endpoint
         ];
 
         $this->custom_method_form_list[] = $form_data;
@@ -59,15 +60,22 @@ class BlockPageEasyServices extends Block
             <title><?=$this->getTitle()?></title>
             <?=$this->getSectionContent('head_additional')?>
         </head>
-        <body>
+        <body style="background-color:black">
         <div>
             <div style="background-color:white; border-bottom-color:white;border-bottom-style:double;">
+                <nav class="navbar navbar-light bg-light">
+                    <span class="navbar-brand">
+                        <img src="http://www.labo86.cl/assets/images/labo86_black_letter_200x64.png" width="100" class="d-inline-block" alt="" loading="lazy">
+                        Battle Royale
+                    </span>
+                </nav>
                 <?php $this->htmlBodyContent(); ?>
             </div>
-            <footer class="section-container">
-                <div class="container-padding" style="text-align:center">
-                    <img width=100 src="<?=$this->makeLabo86Logo()?>">
-                    <p style="color:#7f7f7f;font-size:0.7em">Edwin Rodríguez-León © <?=date('Y')?></p>
+
+            <footer>
+                <div class="mt-3" style="text-align:center">
+                    <img width=100 src="http://www.labo86.cl/assets/images/labo86_white_letter_200x64.png">
+                    <p style="color:#7f7f7f;">Edwin Rodríguez-León © <?=date('Y')?></p>
                 </div>
             </footer>
         </div>
@@ -91,32 +99,46 @@ class BlockPageEasyServices extends Block
     }
 
     public function htmlBodyContent() { ?>
+
 <div id="main-container">
         <div class="container-md" data-page-name="index_page">
-            <h2>Servicios personalizados</h2>
-            <?php foreach ( $this->custom_method_form_list as $form_data ) :
-                $method = $form_data['method'];
-                $id = $form_data['id'];
-                ?>
-                <button onclick="changePage('<?=$id?>_page')"><?=$method?></button><br/>
-            <?php endforeach; ?>
-            <h2>Servicios automaticos disponibles</h2>
-            <div id="automatic_buttons" class="list-group">
+            <?php if ( !empty($this->custom_method_form_list) ) : ?>
+            <p><?=$this->getDescription()?></p>
+            <h4>Servicios</h4>
+            <div class="container-fluid btn-group-vertical mb-5">
+                <?php foreach ( $this->custom_method_form_list as $form_data ) :
+                    $method = $form_data['method'];
+                    $id = $form_data['id'];
+                    ?>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage('<?=$id?>_page')"><?=$method?></button>
+            </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <h4>Servicios básicos</h4>
+            <div id="automatic_buttons" class="container-fluid btn-group-vertical mb-5">
             </div>
         </div>
     <?php foreach ( $this->custom_method_form_list as $form_data ) :
         $method = $form_data['method'];
         $id = $form_data['id'];
+        $endpoint = $form_data['endpoint'];
         ?>
         <div class="container-md" data-page-name="<?=$id?>_page" style="display:none">
-            <h2><?=$method?></h2>
+            <nav class="navbar navbar-light bg-light">
+                <span class="navbar-brand"><?=$method?></span>
+                <button class="btn btn-outline-secondary btn-sm" onclick="changePage('index_page')">Volver</button>
+            </nav>
             <form id="<?=$id?>_form">
-            <?=$this->getSectionContent($id)?>
-                <br/>
-                <input type="hidden" name="method" value="<?=$method?>">
-                <button onclick="submitRequest('<?=$id?>_form')">Enviar</button>
+                <?=$this->getSectionContent($id)?>
+                <button type="submit" class="btn btn-primary" onclick="submitRequest('<?=$endpoint?>', '<?=$id?>_form' ,'<?=$method?>')">Enviar</button>
             </form>
-            <button onclick="changePage('index_page')">Back</button>
+            <nav class="navbar navbar-light bg-light pt-5">
+              <span class="navbar-brand">Resultado</span>
+              <button class="btn btn-outline-secondary btn-sm"  onclick="newWindow('<?=$method?>')">New Window</button>
+            </nav>
+            <div class="embed-responsive embed-responsive-21by9">
+              <iframe class="embed-responsive-item" id="<?=$method?>_target"></iframe>
+            </div>
         </div>
     <?php endforeach; ?>
 </div>
@@ -130,10 +152,12 @@ fetch(endpoint)
     let html = "";
     for ( let automatic_method of myJson ) {
             if ( automatic_method.parameter_list.length === 0 ) continue;
-            html += "    <div class=\"container-md\" data-page-name=\"" + automatic_method.method + "_page\" style=\"display:none\">" +
-                "        <h2>" + automatic_method.method +"</h2>" +
-                "       <button onclick=\"changePage('index_page')\">Back</button>" +
-                "        <form id=\"" + automatic_method.method +"_form\">";
+        html += "<div class=\"container-md\" data-page-name=\"" + automatic_method.method + "_page\" style=\"display:none\">" +
+                "   <nav class=\"navbar navbar-light bg-light\">\n" +
+                "       <span class=\"navbar-brand\">" + automatic_method.method +"</span>" +
+                "       <button class=\"btn btn-outline-secondary btn-sm\" onclick=\"changePage('index_page')\">Volver</button>" +
+                "    </nav>" +
+                "    <form id=\"" + automatic_method.method +"_form\">";
 
             for ( let parameter of automatic_method.parameter_list) {
                 html += "<div class=\"form-group\">";
@@ -154,17 +178,22 @@ fetch(endpoint)
         "            <input type=\"hidden\" name=\"method\" value=\""+ automatic_method.method + "\">" +
         "            <button type=\"submit\" class=\"btn btn-primary\" onclick=\"submitRequest('" + automatic_method.endpoint + "', '"+ automatic_method.method + "_form', '"+ automatic_method.method +"')\">Enviar</button>" +
         "        </form>" +
-        "  <iframe id=\"" + automatic_method.method + "_target\"></iframe>" +
-        "        <button onclick=\"newWindow('" + automatic_method.method + "')\">New Window</button>" +
-        "    </div>";
+            "   <nav class=\"navbar navbar-light bg-light pt-5\">\n" +
+            "       <span class=\"navbar-brand\">Resultado</span>" +
+            "       <button class=\"btn btn-outline-secondary btn-sm\"  onclick=\"newWindow('" + automatic_method.method + "')\">New Window</button>" +
+            "    </nav>" +
+            "    <div class=\"embed-responsive embed-responsive-21by9\">" +
+            "      <iframe class=\"embed-responsive-item\" id=\"" + automatic_method.method + "_target\"></iframe>" +
+            "    </div>" +
+        "</div>";
     }
 
     let html_automatic_buttons = "";
     for ( let automatic_method of myJson )
         if ( automatic_method.parameter_list.length > 0 ) {
-            html_automatic_buttons += "        <button  type=\"button\" class=\"list-group-item list-group-item-action\" onclick=\"changePage('" + automatic_method.method + "_page')\">" + automatic_method.method + "</button>";
+            html_automatic_buttons += "        <button  type=\"button\" class=\"btn btn-sm btn-outline-secondary\" onclick=\"changePage('" + automatic_method.method + "_page')\">" + automatic_method.method + "</button>";
         } else {
-            html_automatic_buttons += "        <button  type=\"button\" class=\"list-group-item list-group-item-action\" onclick=\"submitRequestGet('" + automatic_method.endpoint + "', 'method=" + automatic_method.method + "')\">" + automatic_method.method + "</button>";
+            html_automatic_buttons += "        <button  type=\"button\" class=\"btn btn-sm btn-outline-secondary\" onclick=\"submitRequestGet('" + automatic_method.endpoint + "', 'method=" + automatic_method.method + "')\">" + automatic_method.method + "</button>";
     }
     document.getElementById('automatic_buttons').innerHTML = html_automatic_buttons;
 
