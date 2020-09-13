@@ -109,8 +109,8 @@ EOF);
     {
         file_put_contents($this->path . '/file.php', <<<'EOF'
 <?php
-function f3_get_test1(string $a, string $b) { return $a . $b; }
 function f3_get_test2(int $a, $b) { return $a + $b; }
+function f3_get_test1(string $a, string $b) { return $a . $b; }
 EOF);
 
         mkdir($this->path . '/a/b/c', 0777,true);
