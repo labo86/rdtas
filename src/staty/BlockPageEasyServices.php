@@ -66,7 +66,7 @@ class BlockPageEasyServices extends Block
                 <nav class="navbar navbar-light bg-light">
                     <span class="navbar-brand">
                         <img src="http://www.labo86.cl/assets/images/labo86_black_letter_200x64.png" width="100" class="d-inline-block" alt="" loading="lazy">
-                        Battle Royale
+                        <?=$this->getTitle()?>
                     </span>
                 </nav>
                 <?php $this->htmlBodyContent(); ?>
