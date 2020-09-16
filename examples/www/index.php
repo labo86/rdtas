@@ -13,7 +13,11 @@ $page->prepareMetadata([
 
 $BLOCK = new BlockPageEasyServices($page);
 $BLOCK->setService('services/services.json');
-$BLOCK->sectionBeginForm('something', 'services/services.json');
+$BLOCK->sectionBeginForm('something', 'services/services.json');?>
+Algo 1
+<?php $BLOCK->sectionBeginForm('something', 'services/services.json');?>
+Algo 2
+<?php
 $BLOCK->html();
 
 

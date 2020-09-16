@@ -111,8 +111,8 @@ class BlockPageEasyServices extends Block
                     $id = $form_data['id'];
                     ?>
                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage('<?=$id?>_page')"><?=$method?></button>
-            </div>
                 <?php endforeach; ?>
+            </div>
             <?php endif; ?>
             <h4>Servicios básicos</h4>
             <div id="automatic_buttons" class="container-fluid btn-group-vertical mb-5">
