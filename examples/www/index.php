@@ -13,6 +13,7 @@ $page->prepareMetadata([
 
 $BLOCK = new BlockPageEasyServices($page);
 $BLOCK->setService('services/services.json');
+$BLOCK->addLink('google', 'https://www.google.cl');
 $BLOCK->sectionBeginForm('something', 'services/services.json');?>
 Algo 1
 <?php $BLOCK->sectionBeginForm('something', 'services/services.json');?>

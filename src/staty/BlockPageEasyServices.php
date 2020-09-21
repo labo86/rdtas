@@ -17,6 +17,8 @@ class BlockPageEasyServices extends Block
 {
     protected string $services;
 
+    protected array $link_list = [];
+
     protected array $custom_method_form_list = [];
 
     public function getTitle() : string {
@@ -33,6 +35,13 @@ class BlockPageEasyServices extends Block
 
     public function getService() {
         return $this->service;
+    }
+
+    public function addLink(string $name, string $target) {
+        $this->link_list[] = [
+                'name' => $name,
+                'target' => $target
+        ];
     }
 
     public function sectionBeginForm(string $method, string $endpoint) {
@@ -103,14 +112,20 @@ class BlockPageEasyServices extends Block
 <div id="main-container">
         <div class="container-md" data-page-name="index_page">
             <p><?=$this->getDescription()?></p>
-            <?php if ( !empty($this->custom_method_form_list) ) : ?>
+            <?php if ( !empty($this->custom_method_form_list) || !empty($this->link_list) ) : ?>
             <h4>Servicios</h4>
             <div class="container-fluid btn-group-vertical mb-5">
+                <?php foreach ( $this->link_list as $link ) :
+                    $name = $link['name'];
+                    $target = $link['target'];
+                    ?>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.open('<?=$target?>')"><?=$name?></button>
+                <?php endforeach; ?>
                 <?php foreach ( $this->custom_method_form_list as $form_data ) :
                     $method = $form_data['method'];
                     $id = $form_data['id'];
                     ?>
-                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage('<?=$id?>_page')"><?=$method?></button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage('<?=$id?>_page')"><?=$method?></button>
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
