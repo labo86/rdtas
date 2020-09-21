@@ -19,6 +19,8 @@ class BlockPageEasyServices extends Block
 
     protected array $link_list = [];
 
+    protected array $custom_page_list = [];
+
     protected array $custom_method_form_list = [];
 
     public function getTitle() : string {
@@ -44,10 +46,40 @@ class BlockPageEasyServices extends Block
         ];
     }
 
+    /**
+     * Use los siguientes widgets para:
+     * Page volver
+     * <code>
+     * <button class="btn btn-outline-secondary btn-sm" onclick="changePage('index_page')">Volver</button>
+     * </code>
+     * Para cambiar de visibilidad
+     * <code>
+     *     rdtas.switchVisibility(document.getElementById('main-container'),page_id);
+     * </code>
+     * Para hacer post
+     * <code>
+     * fetch(endpoint)
+     *   .then(response  => response.json())
+     *   .then(function(json) {
+     *   }
+     *
+     * </code>
+     * @param string $page_name
+     */
+    public function sectionBeginPage(string $page_name) {
+        $page_data = [
+                'id' => $page_name . '_page_custom',
+                'name' => $page_name
+        ];
+
+        $this->custom_page_list[] = $page_data;
+        $this->sectionBegin($page_data['id']);
+    }
+
     public function sectionBeginForm(string $method, string $endpoint) {
         $form_data = [
                 'method' => $method,
-                'id' => $method . '_custom',
+                'id' => $method . '_form_custom',
                 'endpoint' => $endpoint
         ];
 
@@ -121,6 +153,12 @@ class BlockPageEasyServices extends Block
                     ?>
                     <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.open('<?=$target?>')"><?=$name?></button>
                 <?php endforeach; ?>
+                <?php foreach ( $this->custom_page_list as $page_data ) :
+                    $name = $page_data['name'];
+                    $id = $page_data['id'];
+                    ?>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="changePage('<?=$id?>_page')"><?=$name?></button>
+                <?php endforeach; ?>
                 <?php foreach ( $this->custom_method_form_list as $form_data ) :
                     $method = $form_data['method'];
                     $id = $form_data['id'];
@@ -133,6 +171,13 @@ class BlockPageEasyServices extends Block
             <div id="automatic_buttons" class="container-fluid btn-group-vertical mb-5">
             </div>
         </div>
+    <?php foreach ( $this->custom_page_list as $page_data ) :
+        $id = $page_data['id'];
+        ?>
+        <div class="container-md" data-page-name="<?=$id?>_page" style="display:none">
+        <?=$this->getSectionContent($id)?>
+        </div>
+    <?php endforeach; ?>
     <?php foreach ( $this->custom_method_form_list as $form_data ) :
         $method = $form_data['method'];
         $id = $form_data['id'];
