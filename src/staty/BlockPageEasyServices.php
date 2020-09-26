@@ -144,7 +144,7 @@ class BlockPageEasyServices extends Block
 <div id="main-container">
         <div class="container-md" data-page-name="index_page">
             <p><?=$this->getDescription()?></p>
-            <?php if ( !empty($this->custom_method_form_list) || !empty($this->link_list) ) : ?>
+            <?php if ( !empty($this->custom_method_form_list) || !empty($this->link_list) || !empty($this->custom_page_list) ) : ?>
             <h4>Servicios</h4>
             <div class="container-fluid btn-group-vertical mb-5">
                 <?php foreach ( $this->link_list as $link ) :
