@@ -157,5 +157,23 @@ class Util
         fclose($f);
     }
 
+    public static function downloadJsComponentsFiles(string $target_dir, string ...$components) {
+        self::resetDirectory($target_dir);
+
+        \labo86\exception_with_data\Util::foreachTry(function($component) use ($target_dir) {
+           $contents = Util::downloadJsComponent($component);
+           file_put_contents($target_dir . '/' . $contents . '.js');
+        }, $components);
+    }
+
+    public static function downloadJsComponent(string $component) : string {
+        $source_file = 'https://raw.githubusercontent.com/labo86/rdtasjs/master/src/component/' . $component . '.js';
+        $contents = file_get_contents($source_file);
+        if ( $contents === FALSE ) {
+            throw new ExceptionWithData('error downloading js component', ['component' => $component, 'source' => $source_file]);
+        }
+        return $contents;
+    }
+
 }
 

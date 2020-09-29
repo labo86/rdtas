@@ -145,5 +145,10 @@ EOF
         $this->assertFileNotExists($filename);
         $lines = iterator_to_array(Util::readFileByLine($filename), false);
     }
+
+    function testDownloadJsComponent() {
+        $contents = Util::downloadJsComponent('Element');
+        $this->assertStringStartsWith('class Element', $contents);
+    }
 }
 
