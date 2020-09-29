@@ -6,8 +6,8 @@ namespace labo86\rdtas\hapi;
 use Generator;
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\hapi\Controller;
-use labo86\hapi_core\Request;
-use labo86\hapi_core\ResponseJson;
+use labo86\hapi\Request;
+use labo86\hapi\ResponseJson;
 use ReflectionException;
 use ReflectionFunction;
 

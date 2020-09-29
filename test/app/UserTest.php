@@ -15,8 +15,8 @@ class UserTest extends TestCase
 
     public function getPDO() : PDO {
         $pdo = new PDO(Util::sqliteDns(":memory:"));
-        Util::update($pdo, User::USER_TABLE_DDL);
-        Util::update($pdo,  User::SESSION_TABLE_DDL);
+        Util::update($pdo, User::USERS_TABLE_DDL);
+        Util::update($pdo,  User::SESSIONS_TABLE_DDL);
         $user_id = 'test';
         $username = 'test';
         $password_hash = password_hash('pass',  PASSWORD_DEFAULT);

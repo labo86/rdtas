@@ -5,12 +5,10 @@ namespace test\labo86\rdtas\hapi;
 
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\hapi\Controller;
-use labo86\hapi_core\Request;
+use labo86\hapi\Request;
 use labo86\rdtas\hapi\Util;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
-use function labo86\rdtas\hapi\getAutomaticMethodList;
-use function labo86\rdtas\hapi\registerAutomaticMethodService;
 
 class UtilTest extends TestCase
 {

@@ -16,7 +16,7 @@ use Throwable;
 class User
 {
 
-    const SESSION_TABLE_DDL = <<<EOF
+    const SESSIONS_TABLE_DDL = <<<EOF
 create table sessions
 (
 	session_id varchar(36) not null
@@ -28,7 +28,7 @@ create table sessions
 );
 EOF;
 
-    const USER_TABLE_DDL = <<<EOF
+    const USERS_TABLE_DDL = <<<EOF
 create table users
 (
 	user_id varchar(36) not null

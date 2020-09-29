@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace test\labo86\rdtas\hapi;
 
 use labo86\exception_with_data\ExceptionWithData;
-use labo86\hapi_core\Request;
-use labo86\hapi_core\ResponseJson;
+use labo86\hapi\Request;
+use labo86\hapi\ResponseJson;
 use labo86\rdtas\hapi\ServiceFunctionReflector;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
