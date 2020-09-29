@@ -150,5 +150,11 @@ EOF
         $contents = Util::downloadJsComponent('Element');
         $this->assertStringStartsWith('class Element', $contents);
     }
+
+    function testDownloadJsComponentFiles() {
+        Util::downloadJsComponentFiles($this->path . '/components', 'Element', 'Button');
+        $this->assertFileExists($this->path . '/components/Element.js');
+        $this->assertFileExists($this->path . '/components/Button.js');
+    }
 }
 

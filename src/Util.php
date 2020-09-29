@@ -157,13 +157,13 @@ class Util
         fclose($f);
     }
 
-    public static function downloadJsComponentsFiles(string $target_dir, string ...$components) {
+    public static function downloadJsComponentFiles(string $target_dir, string ...$component_list) {
         self::resetDirectory($target_dir);
 
-        \labo86\exception_with_data\Util::foreachTry(function($component) use ($target_dir) {
-           $contents = Util::downloadJsComponent($component);
-           file_put_contents($target_dir . '/' . $contents . '.js');
-        }, $components);
+        \labo86\exception_with_data\Util::foreachTry(function($component_name) use ($target_dir) {
+           $contents = Util::downloadJsComponent($component_name);
+           file_put_contents($target_dir . '/' . $component_name . '.js', $contents);
+        }, $component_list);
     }
 
     public static function downloadJsComponent(string $component) : string {
