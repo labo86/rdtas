@@ -74,6 +74,21 @@ EOF;
 
     }
 
+    public static function getUserByName(PDO $pdo, string $name) : array {
+        try {
+            $row = UtilPDO::selectRow($pdo, 'SELECT user_id, name, type FROM users WHERE name = :name', [
+                'name' => $name
+            ]);
+
+            return $row;
+        } catch ( Throwable $exception ) {
+            throw Util::rethrow('user does not exists', [
+                'name' => $name
+            ], $exception);
+        }
+
+    }
+
     public static function createUser(PDO $pdo, string $user_id, string $username, string $password_hash) : array {
         UtilPDO::updateOne($pdo,"INSERT INTO users (user_id, name, password_hash, type) VALUES (:user_id, :name, :password_hash, :type)", [
             'user_id' => $user_id,

@@ -33,6 +33,31 @@ class UserTest extends TestCase
         $this->assertEquals($session, $session_again);
     }
 
+    public function testGetUserByName()
+    {
+        $pdo = $this->getPDO();
+        $user = User::getUserByName($pdo,'test');
+        $this->assertEquals([
+            'name' => 'test',
+            'type' => 'REGISTERED',
+            'user_id' => 'test'
+        ], $user);
+    }
+
+    public function testGetUserByNameUnexistent()
+    {
+        $this->expectExceptionMessage('user does not exists');
+        try {
+            $pdo = $this->getPDO();
+            User::getUserByName($pdo,'unexistent');
+            $this->fail('This should fail');
+        } catch ( ExceptionWithData $exception ) {
+            $data = $exception->getData();
+            $this->assertEquals('unexistent',$data['name']);
+            throw $exception;
+        }
+    }
+
     public function testGetSessionUnexistent()
     {
         $this->expectExceptionMessage('session does not exist');
