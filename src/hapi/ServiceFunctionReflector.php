@@ -123,7 +123,10 @@ class ServiceFunctionReflector
         } else if ( $type === 'int' ) {
             return $request->getIntParameter($name);
         } else if ( $type === 'string' ) {
-            return $request->getStringParameter($name);
+            if ( $name === 'session_id')
+                return $_COOKIE['session_id'] ?? $request->getStringParameter($name);
+            else
+                return $request->getStringParameter($name);
         } else if ( $type == InputFile::class ) {
             return $request->getFileParameter($name);
         } else if ( $type == InputFileList::class ) {
