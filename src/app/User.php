@@ -227,15 +227,11 @@ EOF;
     }
 
     public static function setUserType(PDO $pdo, string $user_id, string $type) {
-        try {
-            UtilPDO::updateOne($pdo, 'UPDATE users SET type = :type WHERE user_id = :user_id',
-                [
-                    'type' => $type,
-                    'user_id' => $user_id
-                ]);
-        } catch (ExceptionWithData $exception ) {
-            var_dump($exception->getData());
-        }
+        UtilPDO::updateOne($pdo, 'UPDATE users SET type = :type WHERE user_id = :user_id',
+            [
+                'type' => $type,
+                'user_id' => $user_id
+            ]);
     }
 
 
