@@ -155,6 +155,19 @@ EOF;
         ];
     }
 
+    /**
+     * Funcion de utilidad.
+     * Siempre se me olvida que utilizar.
+     * Ahora usa BCRYPT
+     * Usa la funcion {@see password_hash()}
+     * Para validar un password use {@see password_verify()}
+     * @param string $password
+     * @return string
+     */
+    public static function createPasswordHash(string $password) : string {
+        return password_hash($password, PASSWORD_BCRYPT);
+    }
+
     public static function validateSession(PDO $pdo, string $session_id) : array {
         $session = self::getSession($pdo, $session_id);
         $user_id = $session['user_id'];
