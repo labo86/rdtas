@@ -46,7 +46,7 @@ class UserTest extends TestCase
 
     public function testGetUserByNameUnexistent()
     {
-        $this->expectExceptionMessage('user does not exists');
+        $this->expectExceptionMessage('USER_DOES_NOT_EXIST');
         try {
             $pdo = $this->getPDO();
             User::getUserByName($pdo,'unexistent');
@@ -60,7 +60,7 @@ class UserTest extends TestCase
 
     public function testGetSessionUnexistent()
     {
-        $this->expectExceptionMessage('session does not exist');
+        $this->expectExceptionMessage('SESSION_DOES_NOT_EXIST');
         try {
             $pdo = $this->getPDO();
             User::getSession($pdo,'test');
@@ -75,7 +75,7 @@ class UserTest extends TestCase
 
     public function testValidateSessionClosed()
     {
-        $this->expectExceptionMessage('session is not active');
+        $this->expectExceptionMessage('SESSION_INACTIVE');
         try {
             $pdo = $this->getPDO();
             $session = User::createSession($pdo,'test', 'pass');
@@ -126,7 +126,7 @@ class UserTest extends TestCase
     }
 
     public function testValidateUserTypeInvalid() {
-        $this->expectExceptionMessage('user does not have permissions');
+        $this->expectExceptionMessage('USER_DOES_NOT_HAVE_PERMISSION');
         try {
             $pdo = $this->getPDO();
             User::validateUserType($pdo, 'test', 'ADMIN');
@@ -156,7 +156,7 @@ class UserTest extends TestCase
 
     public function testCreateSessionWrongPassword()
     {
-        $this->expectExceptionMessage('wrong password');
+        $this->expectExceptionMessage('WRONG_PASSWORD');
         try {
             $pdo = $this->getPDO();
             User::createSession($pdo,'test', 'wrong');
@@ -187,7 +187,7 @@ class UserTest extends TestCase
 
     public function testValidateAdminFromSessionIdNotValid()
     {
-        $this->expectExceptionMessage('user does not have permissions');
+        $this->expectExceptionMessage('USER_DOES_NOT_HAVE_PERMISSION');
         try {
             $pdo = $this->getPDO();
 

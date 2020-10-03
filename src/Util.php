@@ -93,6 +93,9 @@ class Util
 
     /**
      * Intenta crear un directorio desde un path.
+     * Si no existe lo creo recursivamente.
+     * Si existe y no es un directorio entonces lanza excepcion.
+     * Si existe y es un directorio no hace nada
      * @param string $directory_path
      * @return string
      * @throws ExceptionWithData
