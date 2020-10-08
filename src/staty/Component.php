@@ -33,7 +33,7 @@ class Component extends ArrayWrapper {
         return $this->data['label'];
     }
 
-    public function import(string $type) {
+    public function getFile(string $type) {
 
         $component_file = $this->module->getDir() . '/' . $this->getId() . '.' . $type;
         if ( !file_exists($component_file) )
@@ -43,7 +43,7 @@ class Component extends ArrayWrapper {
                 'component_file' => $component_file,
                 'type' => $type
             ]);
-        include($component_file);
+        return $component_file;
 
     }
 

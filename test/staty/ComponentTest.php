@@ -22,7 +22,7 @@ class ComponentTest extends TestCase
         $this->assertEquals('SOME', $component->getLabel());
 
         ob_start();
-        $component->import('html');
+        include $component->getFile('html');
         $this->assertEquals('CONTENTS', ob_get_clean());
     }
 
@@ -35,7 +35,7 @@ class ComponentTest extends TestCase
         ]);
 
 
-        $component->import('html');
+        $component->getFile('html');
     }
 
     public function testFailId() {
