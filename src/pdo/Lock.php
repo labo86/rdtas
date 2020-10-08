@@ -5,7 +5,7 @@ namespace labo86\rdtas\pdo;
 
 use PDO;
 
-abstract class Lock
+class Lock
 {
     protected string $name;
 
@@ -16,7 +16,9 @@ abstract class Lock
         $this->name = $name;
     }
 
-    abstract function acquire() : bool;
+    public function acquire() : bool {
+        return true;
+    }
 
 
 }
