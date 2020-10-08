@@ -33,7 +33,15 @@ class Component extends ArrayWrapper {
         return $this->data['label'];
     }
 
-    public function getFile(string $type) {
+    /**
+     * Importa un archivo con un tipo. el tipo es la extension.
+     * Ademas se permite injectar variables.
+     * es un arreglo con nombre y valor
+     * @param string $type
+     * @param array $injected_vars
+     * @throws ExceptionWithData
+     */
+    public function import(string $type, array $injected_vars = []) {
 
         $component_file = $this->module->getDir() . '/' . $this->getId() . '.' . $type;
         if ( !file_exists($component_file) )
@@ -43,7 +51,11 @@ class Component extends ArrayWrapper {
                 'component_file' => $component_file,
                 'type' => $type
             ]);
-        return $component_file;
+
+        foreach ( $injected_vars  as $name => $value ) {
+            $$name = $value;
+        }
+        include($component_file);
 
     }
 

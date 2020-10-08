@@ -9,8 +9,37 @@ use PHPUnit\Framework\TestCase;
 
 class ModuleTest extends TestCase
 {
+    public function setUp(): void
+    {
+        $this->path = tempnam(__DIR__, 'demo');
+
+        unlink($this->path);
+        mkdir($this->path, 0777);
+    }
+
+    public function tearDown(): void
+    {
+        exec('rm -rf ' . $this->path);
+    }
+
+    public function setupDir() {
+        mkdir($this->path . '/module');
+        file_put_contents($this->path .'/module/config.json',<<<EOF
+[
+  {
+    "id" : "some",
+    "label" : "SOME"
+  }
+]
+EOF);
+        file_put_contents($this->path. '/module/some.html', 'CONTENTS');
+
+    }
+
+
     public function testComponentBasic() {
-        $dir = __DIR__ . '/../resources';
+        $this->setupDir();
+        $dir = $this->path;
         $module = new Module($dir, 'module');
         $component_list = $module->getComponentList();
         $this->assertCount(1, $component_list);
@@ -27,7 +56,7 @@ class ModuleTest extends TestCase
     public function testComponentDoesNotExist() {
 
         $this->expectExceptionMessage('MODULE_CONFIG_DOES_NOT_EXIST');
-        $dir = __DIR__ . '/../resources';
+        $dir = $this->path;
         $module = new Module($dir, 'not exists');
 
     }
