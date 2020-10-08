@@ -36,7 +36,7 @@ class ServiceFunctionReflectorTest extends TestCase
             $this->fail("should throw");
 
         } catch (ExceptionWithData $exception) {
-            $this->assertEquals("service parameter type is not supported", $exception->getMessage());
+            $this->assertEquals("SERVICE_PARAMETER_TYPE_IS_NOT_SUPPORTED", $exception->getMessage());
             $this->assertEquals([ 'type' => 'float'], $exception->getData());
         }
     }
@@ -106,14 +106,14 @@ class ServiceFunctionReflectorTest extends TestCase
             unset($data['d']['element_list']);
 
             $this->assertEquals([
-                'm' => "some services parameter types are not supported",
+                'm' => "SOME_SERVICES_PARAMETER_TYPES_ARE_NOT_SUPPORTED",
                 'd' => [
                     'filename' => __FILE__,
                     'function' => 'test\labo86\rdtas\hapi\{closure}',
                     'line' => $line
                     ],
-                'p' => [ 'm' => 'service parameter type is not supported', 'd' => ['name' => 'param_1', 'type' => 'float'], 'p' => [ 'm' => 'service parameter type is not supported', 'd' => ['type' => 'float']]],
-                'pl' => [[ 'm' => 'service parameter type is not supported', 'd' => ['name' => 'param_1', 'type' => 'float'], 'p' => [ 'm' => 'service parameter type is not supported', 'd' => ['type' => 'float']]]]
+                'p' => [ 'm' => 'SERVICE_PARAMETER_TYPE_IS_NOT_SUPPORTED', 'd' => ['name' => 'param_1', 'type' => 'float'], 'p' => [ 'm' => 'SERVICE_PARAMETER_TYPE_IS_NOT_SUPPORTED', 'd' => ['type' => 'float']]],
+                'pl' => [[ 'm' => 'SERVICE_PARAMETER_TYPE_IS_NOT_SUPPORTED', 'd' => ['name' => 'param_1', 'type' => 'float'], 'p' => [ 'm' => 'SERVICE_PARAMETER_TYPE_IS_NOT_SUPPORTED', 'd' => ['type' => 'float']]]]
             ],$data);
 
         }

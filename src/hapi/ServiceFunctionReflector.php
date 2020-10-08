@@ -44,7 +44,7 @@ class ServiceFunctionReflector
             }, $reflection_parameter_list);
 
         } catch ( ThrowableList $exception ) {
-            throw Util::rethrow('some services parameter types are not supported',
+            throw Util::rethrow('SOME_SERVICES_PARAMETER_TYPES_ARE_NOT_SUPPORTED',
             [
                'function' => $reflection_function->getName(),
                'filename' => $reflection_function->getFileName(),
@@ -99,7 +99,7 @@ class ServiceFunctionReflector
             else if ( $type->getName() === InputFile::class ) return InputFile::class;
             else if ( $type->getName() === InputFileList::class ) return InputFileList::class;
             else if ( $type->getName() === Request::class ) return Request::class;
-            else throw new ExceptionWithData('service parameter type is not supported', [
+            else throw new ExceptionWithData('SERVICE_PARAMETER_TYPE_IS_NOT_SUPPORTED', [
                 'type' => $type->getName()
             ]);
         } else {
@@ -134,7 +134,7 @@ class ServiceFunctionReflector
         } else if ( $type === Request::class ) {
            return $request;
         } else {
-            throw new ExceptionWithData('unsupported type in request', [
+            throw new ExceptionWithData('UNSUPPORTED_TYPE_IN_REQUEST', [
                 'name' => $name,
                 'type' => $type,
             ]);
@@ -156,7 +156,7 @@ class ServiceFunctionReflector
             }, $parameter_info_list);
 
         } catch ( ThrowableList $exception ) {
-            throw Util::rethrow('error obtaining parameter value list',
+            throw Util::rethrow('ERROR_OBTAINING_PARAMETER_VALUE_LIST',
                 [
                     'parameter_info_list' => $parameter_info_list,
                 ], $exception);

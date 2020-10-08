@@ -106,7 +106,7 @@ class Util
             mkdir($directory_path, 0777, true);
 
         if (!is_dir($directory_path))
-            throw new ExceptionWithData('target directory is not a directory',
+            throw new ExceptionWithData('TARGET_DIRECTORY_IS_NOT_A_DIRECTORY',
                 [
                     'directory_path' => $directory_path,
                 ]);
@@ -142,7 +142,7 @@ class Util
 
         exec($command, $output, $return);
         if ($return !== 0)
-            throw new ExceptionWithData('error removing file or dir', ['path' => $path, 'command' => $command, 'output' => $output, 'return' => $return]);
+            throw new ExceptionWithData('ERROR_REMOVING_FILE_OR_DIR', ['path' => $path, 'command' => $command, 'output' => $output, 'return' => $return]);
         return true;
     }
 
@@ -150,7 +150,7 @@ class Util
     {
         $f = @fopen($filename, 'r');
         if ($f === FALSE) {
-            throw new ExceptionWithData('error at opening file', ['filename' => $filename]);
+            throw new ExceptionWithData('ERROR_AT_OPENING_FILE', ['filename' => $filename]);
         }
 
         while ($l = fgets($f)) {
@@ -173,7 +173,7 @@ class Util
         $source_file = 'https://raw.githubusercontent.com/labo86/rdtasjs/master/src/component/' . $component . '.js';
         $contents = file_get_contents($source_file);
         if ( $contents === FALSE ) {
-            throw new ExceptionWithData('error downloading js component', ['component' => $component, 'source' => $source_file]);
+            throw new ExceptionWithData('ERROR_DOWNLOADING_JS_COMPONENT', ['component' => $component, 'source' => $source_file]);
         }
         return $contents;
     }
