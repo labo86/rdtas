@@ -5,6 +5,7 @@ namespace test\labo86\rdtas\pdo;
 
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\rdtas\ErrMsg;
+use labo86\rdtas\pdo\LockMySql;
 use labo86\rdtas\pdo\Util;
 use PHPUnit\Framework\TestCase;
 class UtilMySqlTest extends TestCase
@@ -84,6 +85,23 @@ EOF;
             [':data' => $data, ':current_round' => -1, ':tournament_id' =>$tournament_id]);
         $row = Util::selectRow($pdo, 'SELECT data, current_round, tournament_id FROM tournament_data WHERE tournament_id = :tournament_id', [':tournament_id' => $tournament_id]);
         $this->assertEquals(['data' => $data, 'current_round' => -1, 'tournament_id' => 'id'], $row);
+
+    }
+
+    public function testLock() {
+        $pdo_1 = $this->getPDO();
+        $pdo_2 = $this->getPDO();
+
+        $lock_1 = new LockMySql($pdo_1, 'PROC');
+        $this->assertTrue($lock_1->acquire());
+
+        $lock_2 = new LockMySql($pdo_2, 'PROC');
+        $this->assertFalse($lock_2->acquire());
+
+        $lock_1->__destruct();
+
+        $this->assertTrue($lock_2->acquire());
+
 
     }
 }
