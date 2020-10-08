@@ -5,6 +5,7 @@ namespace test\labo86\rdtas\app;
 
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\rdtas\app\User;
+use labo86\rdtas\ErrMsg;
 use labo86\rdtas\pdo\Util;
 use PDO;
 use PHPUnit\Framework\TestCase;
@@ -126,7 +127,7 @@ class UserTest extends TestCase
     }
 
     public function testValidateUserTypeInvalid() {
-        $this->expectExceptionMessage('USER_DOES_NOT_HAVE_PERMISSION');
+        $this->expectExceptionMessage(ErrMsg::USER_DOES_NOT_HAVE_PERMISSION);
         try {
             $pdo = $this->getPDO();
             User::validateUserType($pdo, 'test', 'ADMIN');
@@ -187,7 +188,7 @@ class UserTest extends TestCase
 
     public function testValidateAdminFromSessionIdNotValid()
     {
-        $this->expectExceptionMessage('USER_DOES_NOT_HAVE_PERMISSION');
+        $this->expectExceptionMessage(ErrMsg::USER_DOES_NOT_HAVE_PERMISSION);
         try {
             $pdo = $this->getPDO();
 

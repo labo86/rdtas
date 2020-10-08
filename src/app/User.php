@@ -9,6 +9,7 @@ use DateInterval;
 use DateTime;
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\exception_with_data\Util;
+use labo86\rdtas\ErrMsg;
 use labo86\rdtas\pdo\Util as UtilPDO;
 use PDO;
 use Throwable;
@@ -52,7 +53,7 @@ EOF;
 
             return $row;
         } catch ( Throwable $exception ) {
-            throw Util::rethrow('SESSION_DOES_NOT_EXIST', [
+            throw Util::rethrow(ErrMsg::SESSION_DOES_NOT_EXIST, [
                 'session_id' => $session_id
             ], $exception);
 
@@ -67,7 +68,7 @@ EOF;
 
             return $row;
         } catch ( Throwable $exception ) {
-            throw Util::rethrow('USER_DOES_NOT_EXIST', [
+            throw Util::rethrow(ErrMsg::USER_DOES_NOT_EXIST, [
                 'user_id' => $user_id
             ], $exception);
         }
@@ -82,7 +83,7 @@ EOF;
 
             return $row;
         } catch ( Throwable $exception ) {
-            throw Util::rethrow('USER_DOES_NOT_EXIST', [
+            throw Util::rethrow(ErrMsg::USER_DOES_NOT_EXIST, [
                 'name' => $name
             ], $exception);
         }
@@ -103,7 +104,7 @@ EOF;
         $user = self::getUser($pdo, $user_id);
         $type = $user['type'];
         if ( $user['type'] !== $required_type ) {
-            throw new ExceptionWithData('USER_DOES_NOT_HAVE_PERMISSION', [
+            throw new ExceptionWithData(ErrMsg::USER_DOES_NOT_HAVE_PERMISSION, [
                 'user_id' =>  $user_id,
                 'required_type' => $required_type,
                 'user_type' => $type
@@ -118,7 +119,7 @@ EOF;
                 'name' => $username
             ]);
         } catch ( Throwable $exception ) {
-            throw Util::rethrow('USER_DOES_NOT_EXIST', [
+            throw Util::rethrow(ErrMsg::USER_DOES_NOT_EXIST, [
                 'username' => $username
             ], $exception);
         }
@@ -126,7 +127,7 @@ EOF;
         $session_id = md5(microtime());
         $password_hash = $row['password_hash'];
         if ( !password_verify($password, $password_hash) ) {
-            throw new ExceptionWithData('WRONG_PASSWORD', [
+            throw new ExceptionWithData(ErrMsg::WRONG_PASSWORD, [
                 'username' => $username,
                 'password' => $password
             ]);
@@ -173,7 +174,7 @@ EOF;
         $user_id = $session['user_id'];
         $state = $session['state'];
         if ( $state !== 'ACTIVE' )
-            throw new ExceptionWithData('SESSION_INACTIVE', [
+            throw new ExceptionWithData(ErrMsg::SESSION_INACTIVE, [
                 'session_id' => $session_id,
                 'user_id' => $user_id,
                 'state' => $state
@@ -183,7 +184,7 @@ EOF;
         $expiration_date = DateTime::createFromFormat(self::DATE_FORMAT, $session['expiration_date']);
         $current_date = new DateTime();
         if ( $expiration_date < $current_date ) {
-            throw new ExceptionWithData('SESSION_EXPIRED', [
+            throw new ExceptionWithData(ErrMsg::SESSION_EXPIRED, [
                 'session_id' => $session_id,
                 'user_id' => $user_id,
                 'state' => $state,

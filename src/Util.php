@@ -17,7 +17,7 @@ class Util
     {
         $json_data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         if ($json_data === FALSE) {
-            throw new ExceptionWithData('data is not json compatible', ['data' => $data]);
+            throw new ExceptionWithData(ErrMsg::DATA_IS_NOT_JSON_COMPATIBLE, ['data' => $data]);
         }
         return $json_data;
     }
@@ -26,7 +26,7 @@ class Util
     {
         $data = json_decode($json_data, true);
         if ($data === NULL) {
-            throw new ExceptionWithData('string is not a valid json', ['data' => $json_data]);
+            throw new ExceptionWithData(ErrMsg::STRING_IS_NOT_A_VALID_JSON, ['data' => $json_data]);
         }
         return $data;
     }
@@ -43,11 +43,11 @@ class Util
         try {
             $json_data = self::arrayToString($data);
         } catch (Throwable $exception) {
-            throw \labo86\exception_with_data\Util::rethrow('format error in file contents', ['filename' => $filename], $exception);
+            throw \labo86\exception_with_data\Util::rethrow(ErrMsg::FORMAT_ERROR_IN_FILE_CONTENTS, ['filename' => $filename], $exception);
         }
 
         if (file_put_contents($filename, $json_data) === FALSE) {
-            throw new ExceptionWithData('error writing array in file', ['filename' => $filename]);
+            throw new ExceptionWithData(ErrMsg::ERROR_WRITING_ARRAY_IN_FILE, ['filename' => $filename]);
         }
     }
 
@@ -62,13 +62,13 @@ class Util
     {
         $json_data = file_get_contents($filename);
         if ($json_data === FALSE) {
-            throw new ExceptionWithData('error opening array from file', ['filename' => $filename]);
+            throw new ExceptionWithData(ErrMsg::ERROR_OPENING_ARRAY_FROM_FILE, ['filename' => $filename]);
         }
 
         try {
             return self::stringToArray($json_data);
         } catch (Throwable $exception) {
-            throw \labo86\exception_with_data\Util::rethrow('format error in file contents', ['filename' => $filename], $exception);
+            throw \labo86\exception_with_data\Util::rethrow(ErrMsg::FORMAT_ERROR_IN_FILE_CONTENTS, ['filename' => $filename], $exception);
         }
     }
 
@@ -106,7 +106,7 @@ class Util
             mkdir($directory_path, 0777, true);
 
         if (!is_dir($directory_path))
-            throw new ExceptionWithData('TARGET_DIRECTORY_IS_NOT_A_DIRECTORY',
+            throw new ExceptionWithData(ErrMsg::TARGET_DIRECTORY_IS_NOT_A_DIRECTORY,
                 [
                     'directory_path' => $directory_path,
                 ]);
@@ -142,7 +142,7 @@ class Util
 
         exec($command, $output, $return);
         if ($return !== 0)
-            throw new ExceptionWithData('ERROR_REMOVING_FILE_OR_DIR', ['path' => $path, 'command' => $command, 'output' => $output, 'return' => $return]);
+            throw new ExceptionWithData(ErrMsg::ERROR_REMOVING_FILE_OR_DIR, ['path' => $path, 'command' => $command, 'output' => $output, 'return' => $return]);
         return true;
     }
 
@@ -150,7 +150,7 @@ class Util
     {
         $f = @fopen($filename, 'r');
         if ($f === FALSE) {
-            throw new ExceptionWithData('ERROR_AT_OPENING_FILE', ['filename' => $filename]);
+            throw new ExceptionWithData(ErrMsg::ERROR_AT_OPENING_FILE, ['filename' => $filename]);
         }
 
         while ($l = fgets($f)) {
@@ -173,7 +173,7 @@ class Util
         $source_file = 'https://raw.githubusercontent.com/labo86/rdtasjs/master/src/component/' . $component . '.js';
         $contents = file_get_contents($source_file);
         if ( $contents === FALSE ) {
-            throw new ExceptionWithData('ERROR_DOWNLOADING_JS_COMPONENT', ['component' => $component, 'source' => $source_file]);
+            throw new ExceptionWithData(ErrMsg::ERROR_DOWNLOADING_JS_COMPONENT, ['component' => $component, 'source' => $source_file]);
         }
         return $contents;
     }

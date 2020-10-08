@@ -13,6 +13,7 @@ use labo86\hapi\InputFileList;
 use labo86\hapi\Request;
 use labo86\hapi\Response;
 use labo86\hapi\ResponseJson;
+use labo86\rdtas\ErrMsg;
 use ReflectionFunctionAbstract;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -44,7 +45,7 @@ class ServiceFunctionReflector
             }, $reflection_parameter_list);
 
         } catch ( ThrowableList $exception ) {
-            throw Util::rethrow('SOME_SERVICES_PARAMETER_TYPES_ARE_NOT_SUPPORTED',
+            throw Util::rethrow(ErrMsg::SOME_SERVICES_PARAMETER_TYPES_ARE_NOT_SUPPORTED,
             [
                'function' => $reflection_function->getName(),
                'filename' => $reflection_function->getFileName(),
@@ -73,7 +74,7 @@ class ServiceFunctionReflector
         try {
             $type = is_null($reflection_type) ? 'string' : self::getParameterType($reflection_type);
         } catch ( ExceptionWithData $exception ) {
-            throw Util::rethrow("", [
+            throw Util::rethrow(ErrMsg::SERVICE_PARAMETER_TYPE_IS_NOT_SUPPORTED, [
                 'name' => $name
             ], $exception);
         }
@@ -99,7 +100,7 @@ class ServiceFunctionReflector
             else if ( $type->getName() === InputFile::class ) return InputFile::class;
             else if ( $type->getName() === InputFileList::class ) return InputFileList::class;
             else if ( $type->getName() === Request::class ) return Request::class;
-            else throw new ExceptionWithData('SERVICE_PARAMETER_TYPE_IS_NOT_SUPPORTED', [
+            else throw new ExceptionWithData(ErrMsg::SERVICE_PARAMETER_TYPE_IS_NOT_SUPPORTED, [
                 'type' => $type->getName()
             ]);
         } else {
@@ -134,7 +135,7 @@ class ServiceFunctionReflector
         } else if ( $type === Request::class ) {
            return $request;
         } else {
-            throw new ExceptionWithData('UNSUPPORTED_TYPE_IN_REQUEST', [
+            throw new ExceptionWithData(ErrMsg::UNSUPPORTED_TYPE_IN_REQUEST, [
                 'name' => $name,
                 'type' => $type,
             ]);
@@ -156,7 +157,7 @@ class ServiceFunctionReflector
             }, $parameter_info_list);
 
         } catch ( ThrowableList $exception ) {
-            throw Util::rethrow('ERROR_OBTAINING_PARAMETER_VALUE_LIST',
+            throw Util::rethrow(ErrMsg::ERROR_OBTAINING_PARAMETER_VALUE_LIST,
                 [
                     'parameter_info_list' => $parameter_info_list,
                 ], $exception);

@@ -15,15 +15,15 @@
   },
   "require": {
     "php": "^7.4",
-    "labo86/exception_with_data" : "^2.2.0",
+    "labo86/exception_with_data" : "^3.0",
     "ext-json": "*",
     "ext-pdo": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^8.5",
     "mikey179/vfsstream": "^1.6",
-    "labo86/staty" : "^0.3.1",
-    "labo86/hapi" : "^3.1"
+    "labo86/staty" : "^1.0",
+    "labo86/hapi" : "^4.0"
   },
   "autoload": {
     "psr-4": {

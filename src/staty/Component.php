@@ -5,6 +5,7 @@ namespace labo86\rdtas\staty;
 
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\rdtas\ArrayWrapper;
+use labo86\rdtas\ErrMsg;
 
 class Component extends ArrayWrapper {
 
@@ -17,7 +18,7 @@ class Component extends ArrayWrapper {
 
     public function getId() : string {
         if ( !isset($this->data['id'])) {
-            throw new ExceptionWithData('COMPONENT_DOES_NOT_HAVE_ID', [
+            throw new ExceptionWithData(ErrMsg::COMPONENT_DOES_NOT_HAVE_ID, [
                 'data' => $this->data
             ]);
         }
@@ -26,7 +27,7 @@ class Component extends ArrayWrapper {
 
     public function getLabel() : string {
         if ( !isset($this->data['label'])) {
-            throw new ExceptionWithData('COMPONENT_DOES_NOT_HAVE_LABEL', [
+            throw new ExceptionWithData(ErrMsg::COMPONENT_DOES_NOT_HAVE_LABEL, [
                 'data' => $this->data
             ]);
         }
@@ -45,7 +46,7 @@ class Component extends ArrayWrapper {
 
         $component_file = $this->module->getDir() . '/' . $this->getId() . '.' . $type;
         if ( !file_exists($component_file) )
-            throw new ExceptionWithData('COMPONENT_DOES_NOT_EXIST', [
+            throw new ExceptionWithData(ErrMsg::COMPONENT_DOES_NOT_EXIST, [
                 'module_name' => $this->module->getName(),
                 'module_dir' => $this->module->getDir(),
                 'component_file' => $component_file,

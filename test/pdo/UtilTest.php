@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace test\labo86\rdtas\pdo;
 
 use labo86\exception_with_data\ExceptionWithData;
+use labo86\rdtas\ErrMsg;
 use labo86\rdtas\pdo\Util;
 use PHPUnit\Framework\TestCase;
 class UtilTest extends TestCase
@@ -49,7 +50,7 @@ class UtilTest extends TestCase
     public function testExecuteFail()
     {
         $this->expectException(ExceptionWithData::class);
-        $this->expectExceptionMessage('error at updating');
+        $this->expectExceptionMessage(ErrMsg::ERROR_AT_UPDATING);
         $pdo = new \PDO(Util::sqliteDns(":memory:"));
         Util::update($pdo, "adfadfasdf");
 

@@ -6,6 +6,7 @@ namespace labo86\rdtas\staty;
 
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\rdtas\ArrayWrapper;
+use labo86\rdtas\ErrMsg;
 use labo86\rdtas\Util;
 
 class Module
@@ -39,7 +40,7 @@ class Module
     public function loadConfig(string $name) : array {
         $config_file = $this->getDir() . '/config.json';
         if ( !file_exists($config_file) ) {
-            throw new ExceptionWithData('MODULE_CONFIG_DOES_NOT_EXIST', [
+            throw new ExceptionWithData(ErrMsg::MODULE_CONFIG_DOES_NOT_EXIST, [
                 'config_file' => $config_file,
                 'name' => $name
             ]);
