@@ -11,7 +11,7 @@ use labo86\rdtas\Util;
  * Debe implementar static string $default_data_file
  * @package labo86\rdtas\app
  */
-class ConfigDefault
+class ConfigDefault extends Config
 {
     protected static array $default_data;
 
