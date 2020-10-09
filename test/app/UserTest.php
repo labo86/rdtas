@@ -16,8 +16,8 @@ class UserTest extends TestCase
 
     public function getPDO() : PDO {
         $pdo = new PDO(Util::sqliteDns(":memory:"));
-        Util::update($pdo, User::USERS_TABLE_DDL);
-        Util::update($pdo,  User::SESSIONS_TABLE_DDL);
+        Util::update($pdo, User::DDL_TABLE_USERS);
+        Util::update($pdo,  User::DDL_TABLE_SESSIONS);
         $user_id = 'test';
         $username = 'test';
         $password_hash = password_hash('pass',  PASSWORD_DEFAULT);
@@ -91,7 +91,7 @@ class UserTest extends TestCase
             unset($data['session_id']);
             $this->assertEquals([
                 'user_id' => 'test',
-                'state' => 'CLOSED'
+                'status' => 'CLOSED'
             ], $data);
             throw $exception;
         }

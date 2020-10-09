@@ -14,6 +14,7 @@ class Module
     protected string $dir;
 
     protected array $config;
+    protected string $name;
 
     /**
      * Module constructor.

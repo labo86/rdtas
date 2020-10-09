@@ -17,7 +17,7 @@ use Throwable;
 class User
 {
 
-    const SESSIONS_TABLE_DDL = <<<EOF
+    const DDL_TABLE_SESSIONS = <<<EOF
 create table sessions
 (
 	session_id varchar(36) not null
@@ -25,11 +25,11 @@ create table sessions
 	user_id varchar(36) null,
 	creation_date datetime null,
 	expiration_date datetime null,
-	state varchar(36) null
+	status varchar(36) null
 );
 EOF;
 
-    const USERS_TABLE_DDL = <<<EOF
+    const DDL_TABLE_USERS = <<<EOF
 create table users
 (
 	user_id varchar(36) not null
@@ -47,7 +47,7 @@ EOF;
     public static function getSession(PDO $pdo, string $session_id) : array {
 
         try {
-            $row = UtilPDO::selectRow($pdo, 'SELECT user_id, creation_date, expiration_date, state FROM sessions WHERE session_id = :session_id', [
+            $row = UtilPDO::selectRow($pdo, 'SELECT user_id, creation_date, expiration_date, status FROM sessions WHERE session_id = :session_id', [
                 'session_id' => $session_id
             ]);
 
@@ -138,13 +138,13 @@ EOF;
         $creation_date = $date->format(self::DATE_FORMAT);
         $date->add(new DateInterval('P1D'));
         $expiration_date =  $date->format(self::DATE_FORMAT);
-        UtilPDO::updateOne($pdo, 'INSERT INTO sessions (session_id, user_id, creation_date, expiration_date, state) VALUES (:session_id, :user_id, :creation_date, :expiration_date, :state)',
+        UtilPDO::updateOne($pdo, 'INSERT INTO sessions (session_id, user_id, creation_date, expiration_date, status) VALUES (:session_id, :user_id, :creation_date, :expiration_date, :status)',
             [
                 'session_id' => $session_id,
                 'user_id' => $user_id,
                 'creation_date' => $creation_date,
                 'expiration_date' => $expiration_date,
-                'state' => 'ACTIVE'
+                'status' => 'ACTIVE'
             ]);
 
         return [
@@ -152,7 +152,7 @@ EOF;
             'user_id' => $user_id,
             'creation_date' => $creation_date,
             'expiration_date' => $expiration_date,
-            'state' => 'ACTIVE'
+            'status' => 'ACTIVE'
         ];
     }
 
@@ -172,12 +172,12 @@ EOF;
     public static function validateSession(PDO $pdo, string $session_id) : array {
         $session = self::getSession($pdo, $session_id);
         $user_id = $session['user_id'];
-        $state = $session['state'];
-        if ( $state !== 'ACTIVE' )
+        $status = $session['status'];
+        if ( $status !== 'ACTIVE' )
             throw new ExceptionWithData(ErrMsg::SESSION_INACTIVE, [
                 'session_id' => $session_id,
                 'user_id' => $user_id,
-                'state' => $state
+                'status' => $status
             ]);
 
 
@@ -187,7 +187,7 @@ EOF;
             throw new ExceptionWithData(ErrMsg::SESSION_EXPIRED, [
                 'session_id' => $session_id,
                 'user_id' => $user_id,
-                'state' => $state,
+                'status' => $status,
                 'current_date' => $current_date->format(self::DATE_FORMAT),
                 'expiration_date' => $expiration_date->format(self::DATE_FORMAT)
             ]);
@@ -220,9 +220,9 @@ EOF;
     }
 
     public static function closeSession(PDO $pdo, string $session_id) {
-        UtilPDO::updateOne($pdo, 'UPDATE sessions SET state = :state WHERE session_id = :session_id',
+        UtilPDO::updateOne($pdo, 'UPDATE sessions SET status = :status WHERE session_id = :session_id',
             [
-                'state' => 'CLOSED',
+                'status' => 'CLOSED',
                 'session_id' => $session_id
         ]);
     }

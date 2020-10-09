@@ -138,15 +138,10 @@ class ServiceFunctionReflectorTest extends TestCase
      * @throws ExceptionWithData
      */
     public function testGetParameterValueFromRequest($expected, $value, string $type) {
-        $stub = $this->getMockBuilder(Request::class)
-            ->onlyMethods(['getParameterList'])
-            ->getMock();
+        $request = new Request();
+        $request->setParameterList(['value' => $value]);
 
-        $stub->expects($this->any())
-            ->method('getParameterList')
-            ->willReturn(['value' => $value]);
-
-        $this->assertEquals($expected, ServiceFunctionReflector::getParameterValueFromRequest($stub, 'value', $type));
+        $this->assertEquals($expected, ServiceFunctionReflector::getParameterValueFromRequest($request, 'value', $type));
 
     }
 

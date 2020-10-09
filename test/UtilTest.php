@@ -6,15 +6,6 @@ namespace test\labo86\rdtas;
 use labo86\exception_with_data\ExceptionWithData;
 use labo86\rdtas\Util;
 use PHPUnit\Framework\TestCase;
-use function labo86\rdtas\arrayToFile;
-use function labo86\rdtas\arrayToString;
-use function labo86\rdtas\createDirectory;
-use function labo86\rdtas\fileToArray;
-use function labo86\rdtas\iterateFilesRecursively;
-use function labo86\rdtas\readFileByLine;
-use function labo86\rdtas\removeFileOrDir;
-use function labo86\rdtas\resetDirectory;
-use function labo86\rdtas\stringToArray;
 
 class UtilTest extends TestCase
 {

@@ -3,6 +3,7 @@
     <testsuites>
         <testsuite name="main">
             <directory>./test/pdo/UtilMySqlTest.php</directory>
+            <directory>./test/app/ServicesBasicMySqlTest.php</directory>
         </testsuite>
     </testsuites>
 </phpunit>
