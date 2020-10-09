@@ -15,8 +15,6 @@ class ConfigDefault extends Config
 {
     protected static array $default_data;
 
-    protected static array $default_data_file;
-
     public function  __construct() {
         parent::__construct(self::getDefaultData());
     }
