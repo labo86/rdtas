@@ -251,6 +251,7 @@ class ServicesBasicTest extends TestCase
             );
             $this->assertArrayHasKey('session_id', $result);
 
+
             $session_id = $result['session_id'];
 
             $result = $this->makeRequest($controller, [

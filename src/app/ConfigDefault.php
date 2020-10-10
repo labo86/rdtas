@@ -28,7 +28,14 @@ class ConfigDefault extends Config
         self::$default_data = $data;
     }
 
+    /**
+     * Solo funciona si no se ha seteado la data previamente.
+     * En caso contrario mantiene la data ya establecida
+     * @param string $default_data_file
+     * @throws \labo86\exception_with_data\ExceptionWithData
+     */
     public static function loadDataFromFile(string $default_data_file) {
-        self::setDefaultData(Util::fileToArray($default_data_file));
+        if ( !isset(self::$default_data))
+            self::setDefaultData(Util::fileToArray($default_data_file));
     }
 }
