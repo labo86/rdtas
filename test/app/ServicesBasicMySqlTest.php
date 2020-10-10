@@ -17,7 +17,7 @@ use labo86\rdtas\ErrMsg;
 use labo86\rdtas\pdo\Util;
 use PHPUnit\Framework\TestCase;
 
-class ServicesBasicmySqlTest extends TestCase
+class ServicesBasicMySqlTest extends TestCase
 {
     private array $service_record = [];
 

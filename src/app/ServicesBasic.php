@@ -35,7 +35,7 @@ abstract class ServicesBasic
                 return $this->create_session($username, $password);
             })
             ->registerService('close_session', function(Request  $request) : Response {
-                $session_id = $request->getStringParameter('session_id') ?? $_COOKIE['session_id'];
+                $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
                 return $this->close_session($session_id);
             })
             ->registerService('create_session_guest', function(Request $request) : Response {
@@ -47,19 +47,19 @@ abstract class ServicesBasic
         $self = $this;
         $controller->getServiceMap()
             ->registerService('create_user', function(Request $request) : Response {
-                $session_id = $request->getStringParameter('session_id') ?? $_COOKIE['session_id'];
+                $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
                 $username = $request->getStringParameter('username');
                 $password = $request->getStringParameter('password');
                 return $this->create_user($session_id, $username, $password);
             })
             ->registerService('set_user_type', function(Request $request) : Response {
-                $session_id = $request->getStringParameter('session_id') ?? $_COOKIE['session_id'];
+                $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
                 $username = $request->getStringParameter('username');
                 $type = $request->getStringParameter('type');
                 return $this->set_user_type($session_id, $username, $type);
             })
             ->registerService('set_user_password', function(Request $request) : Response {
-                $session_id = $request->getStringParameter('session_id') ?? $_COOKIE['session_id'];
+                $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
                 $username = $request->getStringParameter('username');
                 $password = $request->getStringParameter('password');
                 return $this->set_user_password($session_id, $username, $password);
@@ -70,16 +70,16 @@ abstract class ServicesBasic
     function registerServicesServer(Controller $controller) {
         $controller->getServiceMap()
             ->registerService('get_error_by_error_id', function(Request $request) : Response {
-                $session_id = $request->getStringParameter('session_id') ?? $_COOKIE['session_id'];
+                $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
                 $error_id = $request->getStringParameter('error_id');
                 return $this->get_error_by_error_id($session_id, $error_id);
             })
             ->registerService('get_error_list', function(Request $request) : Response {
-                $session_id = $request->getStringParameter('session_id') ?? $_COOKIE['session_id'];
+                $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
                 return $this->get_error_list($session_id);
             })
             ->registerService('get_php_server_info', function(Request $request) : Response {
-                $session_id = $request->getStringParameter('session_id') ?? $_COOKIE['session_id'];
+                $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
                 return $this->get_php_server_info($session_id);
             });
     }
