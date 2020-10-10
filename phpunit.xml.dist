@@ -4,7 +4,7 @@
         <testsuite name="main">
             <directory>./test</directory>
             <exclude>./test/pdo/UtilMySqlTest.php</exclude>
-            <exclude>./test/app/ServiceBasicMySqlTest.php</exclude>
+            <exclude>./test/app/ServicesBasicMySqlTest.php</exclude>
         </testsuite>
     </testsuites>
     <filter>
