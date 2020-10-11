@@ -19,14 +19,13 @@ use labo86\rdtas\app\DataAccessFolderConfig;
 use labo86\rdtas\app\ServicesBasic;
 use labo86\rdtas\app\User;
 use labo86\rdtas\ErrMsg;
+use labo86\rdtas\testing\TestControllerTrait;
 use labo86\rdtas\testing\TestFolderTrait;
 use PHPUnit\Framework\TestCase;
 
 class ServicesBasicTest extends TestCase
 {
-    private array $service_record = [];
-
-    use TestFolderTrait;
+    use TestControllerTrait;
 
     public function setUp(): void
     {
@@ -34,10 +33,6 @@ class ServicesBasicTest extends TestCase
 
     }
 
-    public function tearDown(): void
-    {
-        $this->tearDownTestFolder();
-    }
 
     public function getController() : Controller {
         file_put_contents($this->getTestFolder() . '/schema', User::DDL_TABLE_SESSIONS . User::DDL_TABLE_USERS);
@@ -88,38 +83,6 @@ class ServicesBasicTest extends TestCase
 
         return $controller;
 
-    }
-
-    public function getDataAccessError() : DataAccessError {
-        return new DataAccessError(new ConfigDefault());
-    }
-
-    public function assertNoErrorLogged() {
-        $dao = new DataAccessError(new ConfigDefault());
-        $this->assertEmpty($dao->getErrorList(), 'some error happened');
-    }
-
-    public function getError(string $error_id) : array {
-        $dao = new DataAccessError(new ConfigDefault());
-        return $dao->getError($error_id);
-    }
-
-    public function makeRequest(Controller $controller, array $parameters, array $file_parameters = [])  {
-        $request = new Request();
-        $request->setParameterList($parameters);
-        $request->setFileParameterList($file_parameters);
-        $response = $controller->handleRequest($request);
-        $data = $response instanceof ResponseJson ? $response->getData() : [];
-
-
-        $this->service_record[] = [
-            'request' => [
-                'params' => $parameters,
-                'file' => $file_parameters
-            ],
-            'response' => $data
-        ];
-        return $data;
     }
 
     /**

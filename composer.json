@@ -28,11 +28,13 @@
   "autoload": {
     "psr-4": {
       "labo86\\rdtas\\": "src/"
-    }
+    },
+    "exclude-from-classmap": ["/src/testing/"]
   },
   "autoload-dev": {
     "psr-4": {
-      "test\\labo86\\rdtas\\": "test/"
+      "test\\labo86\\rdtas\\": "test/",
+      "labo86\\rdtas\\testing\\" :"src/testing/"
     }
   },
   "archive": {

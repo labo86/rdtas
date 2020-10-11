@@ -92,7 +92,6 @@ abstract class ServicesBasic
     function get_error_by_error_id(string $session_id, string $error_id) : ResponseJson {
         $dao = $this->getDataAccessUser();
         $pdo = $dao->getPDO();
-        $error_log =
 
         $user = User::validateAdminFromSessionId($pdo, $session_id);
 
@@ -104,8 +103,6 @@ abstract class ServicesBasic
     function get_error_list(string $session_id) : ResponseJson {
         $dao = $this->getDataAccessUser();
         $pdo = $dao->getPDO();
-
-        $error_log = $this->getDataAccessError()->getFilename('error_log');
 
         $user = User::validateAdminFromSessionId($pdo, $session_id);
 
