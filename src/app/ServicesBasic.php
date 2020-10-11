@@ -38,9 +38,9 @@ abstract class ServicesBasic
                 $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
                 return $this->close_session($session_id);
             })
-            ->registerService('get_session', function(Request $request) : Response {
+            ->registerService('get_user_by_session_id', function(Request $request) : Response {
                 $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
-                return $this->get_session($session_id);
+                return $this->get_user_by_session_id($session_id);
             })
             ->registerService('create_session_guest', function(Request $request) : Response {
                 return $this->create_session_guest();
@@ -144,7 +144,7 @@ abstract class ServicesBasic
         return new ResponseJson($response);
     }
 
-    function set_user_type(string $session_id, string $username, string $type) : ResponseJson {
+    function set_user_type(string $session_id, string $username, string $type) : Response {
         $dao = $this->getDataAccessUser();
         $pdo = $dao->getPDO();
 
@@ -152,10 +152,10 @@ abstract class ServicesBasic
 
         $user = User::getUserByName($pdo, $username);
         User::setUserType($pdo, $user['user_id'], $type);
-        return new ResponseJson([]);
+        return new Response();
     }
 
-    function set_user_password(string $session_id, string $username, string $password) : ResponseJson {
+    function set_user_password(string $session_id, string $username, string $password) : Response {
         $dao = $this->getDataAccessUser();
         $pdo = $dao->getPDO();
 
@@ -166,7 +166,7 @@ abstract class ServicesBasic
         $user = User::getUserByName($pdo, $username);
         User::setUserPassword($pdo, $user['user_id'], $password_hash);
 
-        return new ResponseJson([]);
+        return new Response();
     }
 
     function create_session(string $username, string $password) : ResponseJson {
@@ -179,19 +179,24 @@ abstract class ServicesBasic
         return $response;
     }
 
-    function get_session(string $session_id) : ResponseJson {
+    function get_user_by_session_id(string $session_id) : ResponseJson {
         $dao = $this->getDataAccessUser();
         $pdo = $dao->getPDO();
 
+        $session = User::validateSession($pdo, $session_id);
+        $user_id = $session['user_id'];
+        $user = User::getUser($pdo, $user_id);
+        return new ResponseJson($user);
+
     }
 
-    function close_session(string $session_id) : ResponseJson
+    function close_session(string $session_id) : Response
     {
         $dao = $this->getDataAccessUser();
         $pdo = $dao->getPDO();
 
         User::closeSession($pdo, $session_id);
-        return new ResponseJson([]);
+        return new Response();
     }
 
     function create_session_guest() : ResponseJson {

@@ -7,6 +7,7 @@ use Exception;
 use labo86\exception_with_data\MessageMapperArray;
 use labo86\hapi\Controller;
 use labo86\hapi\Request;
+use labo86\hapi\ResponseJson;
 use labo86\rdtas\app\Config;
 use labo86\rdtas\app\ConfigDefault;
 use labo86\rdtas\app\ControllerInstaller;
@@ -108,7 +109,8 @@ class ServicesBasicTest extends TestCase
         $request->setParameterList($parameters);
         $request->setFileParameterList($file_parameters);
         $response = $controller->handleRequest($request);
-        $data = $response->getData() ?? [];
+        $data = $response instanceof ResponseJson ? $response->getData() : [];
+
 
         $this->service_record[] = [
             'request' => [
@@ -163,6 +165,14 @@ class ServicesBasicTest extends TestCase
             );
 
             $this->assertArrayHasKey('post_max_size', $result);
+
+            $result = $this->makeRequest($controller, [
+                'method' => 'get_user_by_session_id', 'session_id' => $session_id
+            ]);
+            $this->assertArrayhasKey('name', $result);
+            $this->assertEquals('admin', $result['name']);
+
+
 
             $result = $this->makeRequest($controller, [
                     'method' => 'create_user', 'session_id' => $session_id, 'username' => 'edwin', 'password' => 'pass'
