@@ -38,6 +38,10 @@ abstract class ServicesBasic
                 $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
                 return $this->close_session($session_id);
             })
+            ->registerService('get_session', function(Request $request) : Response {
+                $session_id = $_COOKIE['session_id'] ?? $request->getStringParameter('session_id');
+                return $this->get_session($session_id);
+            })
             ->registerService('create_session_guest', function(Request $request) : Response {
                 return $this->create_session_guest();
             });
@@ -178,8 +182,14 @@ abstract class ServicesBasic
         $pdo = $dao->getPDO();
 
         $result = User::createSession($pdo, $username, $password);
-        setcookie('session_id', $result['session_id']);
-        return new ResponseJson($result);
+        $response = new ResponseJson($result);
+        $response->setCookie('session_id', $result['session_id']);
+        return $response;
+    }
+
+    function get_session(string $session_id) : ResponseJson {
+        $dao = $this->getDataAccessUser();
+        $pdo = $dao->getPDO();
 
     }
 
@@ -224,8 +234,9 @@ abstract class ServicesBasic
             'name' => $name
         ];
 
-        setcookie('session_id', $session_id);
-        return new ResponseJson($result);
+        $response = new ResponseJson($result);
+        $response->setCookie('session_id', $result['session_id']);
+        return new $response;
     }
 
 }

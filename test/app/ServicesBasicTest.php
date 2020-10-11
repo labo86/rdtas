@@ -102,7 +102,6 @@ class ServicesBasicTest extends TestCase
     }
 
     /**
-     * @runInSeparateProcess
      */
     public function testLoginLogoutWorkFlow() {
         $controller = $this->getController();
@@ -126,7 +125,6 @@ class ServicesBasicTest extends TestCase
 
     /**
      * Crear un usuario y no permitir funciones de administrador
-     * @runInSeparateProcess
      */
     public function testCreateNormalUserWithSession() {
         $controller = $this->getController();
@@ -181,7 +179,6 @@ class ServicesBasicTest extends TestCase
 
     /**
      * Crear un usuario y no permitir funciones de administrador
-     * @runInSeparateProcess
      */
     public function testCreateNormalUserWithSessionChangeType() {
         $controller = $this->getController();
@@ -320,7 +317,6 @@ class ServicesBasicTest extends TestCase
     }
 
     /**
-     * @runInSeparateProcess
      */
     public function testErrors() {
         $controller = $this->getController();
