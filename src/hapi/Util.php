@@ -62,7 +62,7 @@ class Util
     public static function registerFunctionsInFile(Controller $controller, string $filename) : Controller {
         $filename = realpath($filename);
         /** @noinspection PhpIncludeInspection */
-        include($filename);
+        include_once($filename);
 
         foreach ( self::iterateFunctionsInFile($filename) as $function_name => $function ) {
             self::registerFunction($controller, $function_name);
