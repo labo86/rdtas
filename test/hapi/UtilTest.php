@@ -7,24 +7,24 @@ use labo86\exception_with_data\ExceptionWithData;
 use labo86\hapi\Controller;
 use labo86\hapi\Request;
 use labo86\rdtas\hapi\Util;
+use labo86\rdtas\testing\TestFolderTrait;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 
 class UtilTest extends TestCase
 {
-    private $path;
+    use TestFolderTrait;
 
     public function setUp(): void
     {
-        $this->path = tempnam(__DIR__, 'demo');
+        $this->setUpTestFolder(__DIR__);
+        $this->path = $this->getTestFolder();
 
-        unlink($this->path);
-        mkdir($this->path, 0777);
     }
 
     public function tearDown(): void
     {
-        exec('rm -rf ' . $this->path);
+        $this->tearDownTestFolder();
     }
 
     /**

@@ -5,21 +5,23 @@ namespace test\labo86\rdtas\staty;
 
 use labo86\rdtas\staty\Component;
 use labo86\rdtas\staty\Module;
+use labo86\rdtas\testing\TestFolderTrait;
 use PHPUnit\Framework\TestCase;
 
 class ModuleTest extends TestCase
 {
+    use TestFolderTrait;
+
     public function setUp(): void
     {
-        $this->path = tempnam(__DIR__, 'demo');
+        $this->setUpTestFolder(__DIR__);
+        $this->path = $this->getTestFolder();
 
-        unlink($this->path);
-        mkdir($this->path, 0777);
     }
 
     public function tearDown(): void
     {
-        exec('rm -rf ' . $this->path);
+        $this->tearDownTestFolder();
     }
 
     public function setupDir() {

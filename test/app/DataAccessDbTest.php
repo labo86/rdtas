@@ -8,24 +8,26 @@ use labo86\battle_royale\app\DataAccessMySql;
 use labo86\rdtas\app\DataAccessDb;
 use labo86\rdtas\app\DataAccessDbConfig;
 use labo86\rdtas\app\User;
+use labo86\rdtas\testing\TestFolderTrait;
 use PHPUnit\Framework\TestCase;
 
 class DataAccessDbTest extends TestCase
 {
 
+    use TestFolderTrait;
     private $path;
+
 
     public function setUp(): void
     {
-        $this->path = tempnam(__DIR__, 'demo');
+        $this->setUpTestFolder(__DIR__);
+        $this->path = $this->getTestFolder();
 
-        unlink($this->path);
-        mkdir($this->path, 0777);
     }
 
     public function tearDown(): void
     {
-        exec('rm -rf ' . $this->path);
+        $this->tearDownTestFolder();
     }
 
 

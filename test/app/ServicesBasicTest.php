@@ -7,81 +7,100 @@ use Exception;
 use labo86\exception_with_data\MessageMapperArray;
 use labo86\hapi\Controller;
 use labo86\hapi\Request;
+use labo86\rdtas\app\Config;
+use labo86\rdtas\app\ConfigDefault;
+use labo86\rdtas\app\ControllerInstaller;
 use labo86\rdtas\app\DataAccessDb;
 use labo86\rdtas\app\DataAccessDbConfig;
+use labo86\rdtas\app\DataAccessError;
 use labo86\rdtas\app\DataAccessFolder;
 use labo86\rdtas\app\DataAccessFolderConfig;
 use labo86\rdtas\app\ServicesBasic;
 use labo86\rdtas\app\User;
 use labo86\rdtas\ErrMsg;
+use labo86\rdtas\testing\TestFolderTrait;
 use PHPUnit\Framework\TestCase;
 
 class ServicesBasicTest extends TestCase
 {
     private array $service_record = [];
 
+    use TestFolderTrait;
+
     public function setUp(): void
     {
-        $this->path = tempnam(__DIR__, 'demo');
+        $this->setUpTestFolder(__DIR__);
 
-        unlink($this->path);
-        mkdir($this->path, 0777);
     }
 
     public function tearDown(): void
     {
-        exec('rm -rf ' . $this->path);
+        $this->tearDownTestFolder();
     }
 
     public function getController() : Controller {
-        file_put_contents($this->path . '/schema', User::DDL_TABLE_SESSIONS . User::DDL_TABLE_USERS);
+        file_put_contents($this->getTestFolder() . '/schema', User::DDL_TABLE_SESSIONS . User::DDL_TABLE_USERS);
+
+        ConfigDefault::setDefaultData([
+            'db' => [
+                'type' => 'sqlite',
+                'name' => $this->getTestFolder() . '/db.sql',
+                'schema' => $this->getTestFolder() . '/schema'
+            ],
+            'error' => [
+                'dir' => $this->getTestFolder() . '/error'
+            ]
+        ]);
+
+        $installer = new class(new ConfigDefault()) extends ControllerInstaller {
+            function prepareDataStores()
+            {
+                $this->prepareDataAccessDb(new DataAccessDb($this->getConfig()->getDatabase('db')));
+                $this->prepareDataAccessFolder(new DataAccessError($this->getConfig()));
+            }
+        };
 
         $services = new class extends ServicesBasic {
 
-            public string $path;
+            public Config $config;
 
             public function getDataAccessUser(): DataAccessDb
             {
-               return new DataAccessDb(new DataAccessDbConfig([
-                    'type' => 'sqlite',
-                    'name' => $this->path . '/db.sql',
-                    'schema' => $this->path . '/schema'
-                ]));
+                $config = $this->config->getDatabase('db');
+               return new DataAccessDb($config);
             }
 
-            public function getDataAccessError(): DataAccessFolder
+            public function getDataAccessError(): DataAccessError
             {
-                return new DataAccessFolder(new DataAccessFolderConfig([
-                    'dir' => $this->path . '/log'
-                ]));
+                return new DataAccessError($this->config);
             }
         };
-        $services->path = $this->path;
-        $services->getDataAccessUser()->createTables();
-        $services->getDataAccessError()->createDirectory();
+        $services->config = $installer->getConfig();
 
         $controller =  new Controller();
         $controller->setMessageMapper(new MessageMapperArray([]));
-        $controller->setErrorLogFilename($services->getDataAccessError()->getFilename('error_log'));
+        $controller->setErrorLogFilename($services->getDataAccessError()->getLogFilename());
         $services->registerServicesUser($controller);
         $services->registerServicesUserAdmin($controller);
         $services->registerServicesServer($controller);
+        $installer->prepareDataStores();
 
         return $controller;
 
     }
 
-    public function areNoErrors() : bool {
-        $error_log_file = $this->path . '/log/error_log';
-        return !file_exists($error_log_file);
+    public function getDataAccessError() : DataAccessError {
+        return new DataAccessError(new ConfigDefault());
     }
 
-    public function getError() : array {
-        $error_log_file = $this->path . '/log/error_log';
-        if ( file_exists($error_log_file) ) {
-            return json_decode(file_get_contents($error_log_file), true);
-        }
-        throw new Exception("Error retrieving error log");
+    public function assertNoErrorLogged() {
+        $dao = new DataAccessError(new ConfigDefault());
+        $this->assertEmpty($dao->getErrorList(), 'some error happened');
+    }
+
+    public function getError(string $error_id) : array {
+        $dao = new DataAccessError(new ConfigDefault());
+        return $dao->getError($error_id);
     }
 
     public function makeRequest(Controller $controller, array $parameters, array $file_parameters = [])  {
@@ -119,7 +138,7 @@ class ServicesBasicTest extends TestCase
             ]
         );
 
-        $this->assertTrue($this->areNoErrors());
+        $this->assertNoErrorLogged();
 
     }
 
@@ -150,7 +169,7 @@ class ServicesBasicTest extends TestCase
                 ]
             );
 
-            $this->assertTrue($this->areNoErrors());
+            $this->assertNoErrorLogged();
         }
 
         {
@@ -168,7 +187,7 @@ class ServicesBasicTest extends TestCase
                 ]
             );
 
-            $error = $this->getError();
+            $error = $this->getError($result['i']);
             $this->assertEquals(ErrMsg::USER_DOES_NOT_HAVE_PERMISSION, $error['p']['m']);
 
         }
@@ -210,7 +229,7 @@ class ServicesBasicTest extends TestCase
                 ]
             );
 
-            $this->assertTrue($this->areNoErrors());
+            $this->assertNoErrorLogged();
         }
 
         {
@@ -230,7 +249,7 @@ class ServicesBasicTest extends TestCase
 
             $this->assertArrayHasKey('post_max_size', $result);
 
-            $this->assertTrue($this->areNoErrors());
+            $this->assertNoErrorLogged();
         }
 
     }
@@ -269,7 +288,7 @@ class ServicesBasicTest extends TestCase
                 ]
             );
 
-            $error = $this->getError();
+            $error = $this->getError($result['i']);
             $this->assertEquals(ErrMsg::SESSION_INACTIVE, $error['p']['m']);
         }
     }
@@ -311,7 +330,7 @@ class ServicesBasicTest extends TestCase
             );
             $this->assertArrayHasKey('session_id', $result);
 
-            $this->assertTrue($this->areNoErrors());
+            $this->assertNoErrorLogged();
 
         }
     }

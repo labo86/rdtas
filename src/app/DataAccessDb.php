@@ -13,6 +13,9 @@ use PDO;
 class DataAccessDb
 {
 
+    const TYPE_MYSQL = 'mysql';
+    const TYPE_SQLITE = 'sqlite';
+
     protected DataAccessDbConfig $config;
 
     private PDO $pdo;
@@ -29,12 +32,12 @@ class DataAccessDb
         if ( !isset($this->pdo) ) {
             $config = $this->getConfig();
             $database_type = $config->getType();
-            if ( $database_type === 'mysql' ) {
+            if ( $database_type === self::TYPE_MYSQL ) {
                 $database_name = $config->getName();
                 $database_user = $config->getUser();
                 $database_password = $config->getPassword();
                 $this->pdo = new PDO(UtilPDO::mysqlDns($database_name), $database_user, $database_password);
-            } else if ( $database_type === 'sqlite' ) {
+            } else if ( $database_type === self::TYPE_SQLITE ) {
                 $database_name = $config->getName();
                 $this->pdo = new PDO(UtilPDO::sqliteDns($database_name));
             }
@@ -105,7 +108,7 @@ EOF,
 
         $config = $this->getConfig();
         $database_type = $config->getType();
-        if ( $database_type === 'mysql' ) {
+        if ( $database_type === self::TYPE_MYSQL ) {
             return new LockMySql($this->getPDO(), $name);
         } else {
             return new Lock($this->getPDO(),$name);

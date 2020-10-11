@@ -7,6 +7,7 @@ use Exception;
 use labo86\exception_with_data\MessageMapperArray;
 use labo86\hapi\Controller;
 use labo86\hapi\Request;
+use labo86\rdtas\app\ControllerInstaller;
 use labo86\rdtas\app\DataAccessDb;
 use labo86\rdtas\app\DataAccessDbConfig;
 use labo86\rdtas\app\DataAccessFolder;
@@ -15,26 +16,30 @@ use labo86\rdtas\app\ServicesBasic;
 use labo86\rdtas\app\User;
 use labo86\rdtas\ErrMsg;
 use labo86\rdtas\pdo\Util;
+use labo86\rdtas\testing\TestFolderTrait;
 use PHPUnit\Framework\TestCase;
 
 class ServicesBasicMySqlTest extends TestCase
 {
     private array $service_record = [];
 
+    use TestFolderTrait;
+
     public function setUp(): void
     {
-        $this->path = tempnam(__DIR__, 'demo');
+        $this->setUpTestFolder(__DIR__);
+        $this->path = $this->getTestFolder();
 
-        unlink($this->path);
-        mkdir($this->path, 0777);
     }
 
     public function tearDown(): void
     {
-        exec('rm -rf ' . $this->path);
+        $this->tearDownTestFolder();
     }
 
     public function getController() : Controller {
+
+
         file_put_contents($this->path . '/schema', User::DDL_TABLE_SESSIONS . User::DDL_TABLE_USERS);
 
         $services = new class extends ServicesBasic {

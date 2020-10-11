@@ -25,7 +25,7 @@ abstract class ServicesBasic
      * Implementar para obtener el data acces de error
      * @return DataAccessFolder
      */
-    abstract public function getDataAccessError() : DataAccessFolder;
+    abstract public function getDataAccessError() : DataAccessError;
 
     function registerServicesUser(Controller $controller) {
         $controller->getServiceMap()
@@ -92,19 +92,13 @@ abstract class ServicesBasic
     function get_error_by_error_id(string $session_id, string $error_id) : ResponseJson {
         $dao = $this->getDataAccessUser();
         $pdo = $dao->getPDO();
-        $error_log = $this->getDataAccessError()->getFilename('error_log');
+        $error_log =
 
         $user = User::validateAdminFromSessionId($pdo, $session_id);
 
+        $error = $this->getDataAccessError()->getError($error_id);
+        return new ResponseJson($error);
 
-        foreach (Util::readFileByLine($error_log) as $line ) {
-            $error = json_decode($line, true);
-            if ( $error['i'] === $error_id )
-                return new ResponseJson($error);
-        }
-        throw new ExceptionWithData(ErrMsg::ERROR_DOES_NOT_EXIST, [
-            'error_id' => $error_id
-        ]);
     }
 
     function get_error_list(string $session_id) : ResponseJson {
@@ -115,10 +109,8 @@ abstract class ServicesBasic
 
         $user = User::validateAdminFromSessionId($pdo, $session_id);
 
-        $error_list = [];
-        foreach (Util::readFileByLine($error_log) as $line ) {
-            $error_list[] = json_decode($line, true);
-        }
+        $error_list = $this->getDataAccessError()->getErrorList();
+
         return new ResponseJson($error_list);
     }
 

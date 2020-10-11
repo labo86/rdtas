@@ -4,25 +4,24 @@ declare(strict_types=1);
 namespace test\labo86\rdtas;
 
 use labo86\exception_with_data\ExceptionWithData;
+use labo86\rdtas\testing\TestFolderTrait;
 use labo86\rdtas\Util;
 use PHPUnit\Framework\TestCase;
 
 class UtilTest extends TestCase
 {
-
-    private $path;
+    use TestFolderTrait;
 
     public function setUp(): void
     {
-        $this->path = tempnam(__DIR__, 'demo');
+        $this->setUpTestFolder(__DIR__);
+        $this->path = $this->getTestFolder();
 
-        unlink($this->path);
-        mkdir($this->path, 0777);
     }
 
     public function tearDown(): void
     {
-        exec('rm -rf ' . $this->path);
+        $this->tearDownTestFolder();
     }
 
 
