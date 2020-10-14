@@ -32,4 +32,13 @@ class Config
         return new DataAccessDbConfig($this->data[$name]);
     }
 
+    /**
+     * Esta es para poder crear nuevos tipos de datos de configuración
+     * @param string $name
+     * @return array
+     */
+    public function getValue(string $name) : array {
+        return $this->data[$name];
+    }
+
 }
