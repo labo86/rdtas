@@ -47,11 +47,15 @@ class DataAccessDb
 
     /**
      * Solo para UBUNTU
-     * @param $database_name
-     * @param $database_user
-     * @param $database_password
      */
-    public static function createCredentials(string $database_name, string $database_user, string $database_password) {
+    public function createCredentials() {
+         if ( $this->getConfig()->getType() !== 'mysql')
+             return;
+
+         $database_name = $this->getConfig()->getName();
+         $database_user = $this->getConfig()->getUser();
+         $database_password = $this->getConfig()->getPassword();
+
         $script_contents = sprintf(<<<'EOF'
 CREATE USER '%s'@'localhost' IDENTIFIED BY '%s';
 GRANT ALL PRIVILEGES ON %s.* TO '%s'@'localhost';
@@ -74,7 +78,11 @@ EOF,
         unlink($script_filename);
     }
 
-    public static function createDatabase(string $database_name) {
+    public function createDatabase() {
+        if ( $this->getConfig()->getType() !== 'mysql')
+            return;
+
+        $database_name = $this->getConfig()->getName();
         $script_contents = sprintf(<<<'EOF'
 CREATE DATABASE %s CHARACTER SET utf8 COLLATE utf8_general_ci;
 EOF,
