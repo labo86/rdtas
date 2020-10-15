@@ -85,8 +85,6 @@ class ServicesBasicTest extends TestCase
 
     }
 
-    /**
-     */
     public function testLoginLogoutWorkFlow() {
         $controller = $this->getController();
 
@@ -227,9 +225,6 @@ class ServicesBasicTest extends TestCase
 
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testLoginSessionExpired() {
         $controller = $this->getController();
 
@@ -266,9 +261,44 @@ class ServicesBasicTest extends TestCase
         }
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+
+    public function testLoginGuestSessionExpired() {
+        $controller = $this->getController();
+
+        {
+            $result = $this->makeRequest($controller, [
+                    'method' => 'create_session_guest', 'nickname' => 'invitado'
+                ]
+            );
+
+            $this->assertArrayHasKey('session_id', $result);
+
+
+            $session_id = $result['session_id'];
+
+            $result = $this->makeRequest($controller, [
+                'method' => 'get_user_by_session_id', 'session_id' => $session_id
+            ]);
+            $this->assertArrayhasKey('name', $result);
+            $this->assertStringStartsWith('guest_', $result['name']);
+            $this->assertArrayhasKey('nickname', $result);
+            $this->assertEquals('invitado', $result['nickname']);
+
+
+            $result = $this->makeRequest($controller, [
+                    'method' => 'close_session', 'session_id' => $session_id
+                ]
+            );
+
+            $result = $this->makeRequest($controller, [
+                'method' => 'get_user_by_session_id', 'session_id' => $session_id
+            ]);
+
+            $error = $this->getError($result['i']);
+            $this->assertEquals(ErrMsg::SESSION_INACTIVE, $error['p']['m']);
+        }
+    }
+
     public function testChangePassword() {
         $controller = $this->getController();
 
@@ -308,8 +338,6 @@ class ServicesBasicTest extends TestCase
         }
     }
 
-    /**
-     */
     public function testErrors() {
         $controller = $this->getController();
 

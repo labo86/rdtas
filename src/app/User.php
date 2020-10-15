@@ -35,6 +35,7 @@ create table users
 	user_id varchar(36) not null
 		primary key,
 	name varchar(36) null,
+	nickname varchar(36) null,
 	password_hash varchar(255) null,
 	email varchar(100) null,
 	type varchar(10) null
@@ -62,7 +63,7 @@ EOF;
 
     public static function getUser(PDO $pdo, string $user_id) : array {
         try {
-            $row = UtilPDO::selectRow($pdo, 'SELECT user_id, name, type FROM users WHERE user_id = :user_id', [
+            $row = UtilPDO::selectRow($pdo, 'SELECT user_id, name, nickname, type FROM users WHERE user_id = :user_id', [
                 'user_id' => $user_id
             ]);
 
@@ -91,9 +92,10 @@ EOF;
     }
 
     public static function createUser(PDO $pdo, string $user_id, string $username, string $password_hash) : array {
-        UtilPDO::updateOne($pdo,"INSERT INTO users (user_id, name, password_hash, type) VALUES (:user_id, :name, :password_hash, :type)", [
+        UtilPDO::updateOne($pdo,"INSERT INTO users (user_id, name, nickname,password_hash, type) VALUES (:user_id, :name, :nickname, :password_hash, :type)", [
             'user_id' => $user_id,
             'name' => $username,
+            'nickname' => $username,
             'password_hash' => $password_hash,
             'type' => 'REGISTERED'
         ]);
@@ -225,6 +227,14 @@ EOF;
                 'status' => 'CLOSED',
                 'session_id' => $session_id
         ]);
+    }
+
+    public static function setUserNickname(PDO $pdo, string $user_id, string $nickname) {
+        UtilPDO::updateOne($pdo, 'UPDATE users SET nickname = :nickname WHERE user_id = :user_id',
+            [
+                'nickname' => $nickname,
+                'user_id' => $user_id
+            ]);
     }
 
     public static function setUserType(PDO $pdo, string $user_id, string $type) {

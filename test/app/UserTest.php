@@ -122,6 +122,7 @@ class UserTest extends TestCase
         $this->assertEquals([
             'user_id' => 'test',
             'name' => 'test',
+            'nickname' => 'test',
             'type' => 'REGISTERED'
         ], $user);
     }
@@ -181,6 +182,7 @@ class UserTest extends TestCase
         $user = User::validateAdminFromSessionId($pdo, $session['session_id']);
         $this->assertEquals([
             'user_id' => 'test',
+            'nickname' => 'test',
             'name' => 'test',
             'type' => 'ADMIN'
         ], $user);

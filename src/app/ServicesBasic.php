@@ -5,13 +5,10 @@ namespace labo86\rdtas\app;
 
 use DateInterval;
 use DateTime;
-use labo86\exception_with_data\ExceptionWithData;
 use labo86\hapi\Controller;
 use labo86\hapi\Request;
 use labo86\hapi\Response;
 use labo86\hapi\ResponseJson;
-use labo86\rdtas\ErrMsg;
-use labo86\rdtas\Util;
 
 abstract class ServicesBasic
 {
@@ -43,7 +40,8 @@ abstract class ServicesBasic
                 return $this->get_user_by_session_id($session_id);
             })
             ->registerService('create_session_guest', function(Request $request) : Response {
-                return $this->create_session_guest();
+                $nickname = $request->getStringParameter('nickname');
+                return $this->create_session_guest($nickname);
             });
     }
 
@@ -141,6 +139,17 @@ abstract class ServicesBasic
         return new ResponseJson($response);
     }
 
+    function set_user_nickname(string $session_id, string $username, string $nickname) : Response {
+        $dao = $this->getDataAccessUser();
+        $pdo = $dao->getPDO();
+
+        $user = User::validateAdminFromSessionId($pdo, $session_id);
+
+        $user = User::getUserByName($pdo, $username);
+        User::setUserNickname($pdo, $user['user_id'], $nickname);
+        return new Response();
+    }
+
     function set_user_type(string $session_id, string $username, string $type) : Response {
         $dao = $this->getDataAccessUser();
         $pdo = $dao->getPDO();
@@ -196,15 +205,16 @@ abstract class ServicesBasic
         return new Response();
     }
 
-    function create_session_guest() : ResponseJson {
+    function create_session_guest(string $nickname) : ResponseJson {
         $dao = $this->getDataAccessUser();
         $pdo = $dao->getPDO();
 
         $user_id = uniqid();
         $name = 'guest_' . $user_id;
-        \labo86\rdtas\pdo\Util::updateOne($pdo,"INSERT INTO users (user_id, name, type) VALUES (:user_id, :name, :type)", [
+        \labo86\rdtas\pdo\Util::updateOne($pdo,"INSERT INTO users (user_id, name, nickname, type) VALUES (:user_id, :name, :nickname, :type)", [
             'user_id' => $user_id,
             'name' => $name,
+            'nickname' => $nickname,
             'type' => 'GUEST'
         ]);
 
@@ -225,12 +235,13 @@ abstract class ServicesBasic
         $result = [
             'session_id' => $session_id,
             'user_id' => $user_id,
-            'name' => $name
+            'name' => $name,
+            'nickname' => $nickname
         ];
 
         $response = new ResponseJson($result);
         $response->setCookie('session_id', $result['session_id']);
-        return new $response;
+        return $response;
     }
 
 }
