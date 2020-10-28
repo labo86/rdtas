@@ -35,21 +35,38 @@ trait TestControllerTrait
         return $dao->getError($error_id);
     }
 
-    public function makeRequest(Controller $controller, array $parameters, array $file_parameters = [])  {
+    public function makeRequest(Controller $controller, array $parameters, array $file_parameters = []) : array {
+        $data = $this->makeRequestComplete($controller, $parameters, $file_parameters);
+        return $data['response'];
+    }
+
+    public function makeRequestComplete(Controller $controller, array $parameters, array $file_parameters = []) : array {
         $request = new Request();
+        $request->setHttpMethod('GET');
         $request->setParameterList($parameters);
         $request->setFileParameterList($file_parameters);
         $response = $controller->handleRequest($request);
         $data = $response instanceof ResponseJson ? $response->getData() : [];
 
-
-        $this->service_record[] = [
+        $complete_data = [
             'request' => [
                 'params' => $parameters,
                 'file' => $file_parameters
             ],
-            'response' => $data
+            'response' => $data,
+            'more' => [
+                'http_code' => $response->getHttpResponseCode(),
+                'mime_type' => $response->getMimeType(),
+                'headers' => $response->getHeaderList(),
+                'error' => []
+            ]
         ];
-        return $data;
+
+        if ( $response->getHttpResponseCode() >= 400 ) {
+            $complete_data['more']['error'] = $this->getError($data['i']);
+        }
+
+        $this->service_record[] = $complete_data;
+        return $complete_data;
     }
 }

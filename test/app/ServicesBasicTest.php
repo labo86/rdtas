@@ -88,13 +88,13 @@ class ServicesBasicTest extends TestCase
     public function testLoginLogoutWorkFlow() {
         $controller = $this->getController();
 
-        $user = $this->makeRequest($controller, [
+        $user = $this->makeRequestComplete($controller, [
                 'method' => 'create_session', 'username' => 'admin' , 'password' => 'pass'
             ]
         );
-        $this->assertArrayHasKey('session_id', $user);
+        $this->assertArrayHasKey('session_id', $user['response']);
 
-        $session_id = $user['session_id'];
+        $session_id = $user['response']['session_id'];
 
         $user = $this->makeRequest($controller, [
                 'method' => 'close_session', 'session_id' => $session_id

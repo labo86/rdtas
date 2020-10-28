@@ -23,7 +23,7 @@
     "phpunit/phpunit": "^8.5",
     "mikey179/vfsstream": "^1.6",
     "labo86/staty" : "^1.0",
-    "labo86/hapi" : "^4.1"
+    "labo86/hapi" : "^5.1"
   },
   "autoload": {
     "psr-4": {
