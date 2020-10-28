@@ -24,6 +24,27 @@ class ConfigDefault extends Config
 
     }
 
+    /**
+     * Estos son los tipos de datos de ejemplo:
+     * <code>
+     * 'folder' => [
+     *  'dir' => '/path/to/dir'
+     * ],
+     * 'sqlite' => [
+     *  'type' => 'sqlite',
+     *  'name' => ':memory:',
+     *  'schema' => '/path/to/schema.sql'
+     * ],
+     * 'mysql' => [
+     *   'type' => 'mysql',
+     *   'name' => 'db_name',
+     *   'user' => 'db_user',
+     *   'password' => 'db_pass',
+     *   'schema' => '/path/to/schema.sql'
+     * ]
+     * </code>
+     * @param array $data
+     */
     public static function setDefaultData(array $data) {
         self::$default_data = $data;
     }
